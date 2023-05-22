@@ -1,0 +1,55 @@
+---
+layout: "./../../../layouts/Layout.astro"
+title: "Getting Compass to Compile in VS2013 Web Essentials"
+published: ""
+tags: []
+---
+
+# Getting Compass to Compile in VS2013 Web Essentials
+
+<time datetime="2012-11-30T00:00:00.000Z">
+  **Published:** November 29th, 2012
+</time>
+
+- Visual Studio 2013
+
+### TLDR
+
+> If you are looking to use Compass in your own project and need a version that compiles in Visual Studio 2013 using Web Essentials - <a href="http://www.markadrake.com/media/compass.zip" target="_blank">download this copy of compass</a>.
+
+## Step 1 - Update Visual Studio 2013
+
+At the time of this writing the latest update to Visual Studio 2013 is RC 3. Also, if you want to use the nightly build of Web Essentials, you’ll need this update.
+
+<a href="http://www.microsoft.com/en-us/download/details.aspx?id=43721">http://www.microsoft.com/en-us/download/details.aspx?id=43721</a>
+
+## Step 2 - Get the Nightly Build of Web Essentials
+
+At the time of this writing, Web Essentials is getting some pretty heavy updates every day. I don’t recommend ever grabbing the nightly build of any product or plugin automatically, but in this case you’ll want to use the latest features. Instructions with screenshots have been provided on the following page:
+
+<a href="http://vswebessentials.com/download">http://vswebessentials.com/download</a>
+
+## Step 3 - DIY or Download this File
+
+Compass hasn’t changed a lot the past couple of months but if you desire the freshest copy possible, then head over to the <a href="https://github.com/Compass/compass" target="_blank">Compass project on GitHub</a> and download the latest release. Once you have the SCSS files imported into your project, you need to go through them one by one updating the **@import** references.
+
+The Compass compiler basically _knows where Compass files are located already_ so these URLs just work. But Web Essentials _uses relative paths_. So these paths need to be updated throughout the Compass project. EG:
+
+<table border="0" cellpadding="10" align="center">
+  <tbody>
+    <tr>
+      <th>Compass Does This</th>
+      <th>Web Essentials Needs This</th>
+    </tr>
+    <tr>
+      <td>
+        “/compass/css3/shared”
+      </td>
+      <td>
+        “shared”
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+Otherwise, if all this seems like to much work (it is) just <a href="http://www.markadrake.com/media/compass.zip" target="_blank">download this copy of compass</a>. Also be sure to follow <a href="http://madskristensen.net/" target="_blank">Mads Kristensen</a>, author of this project.

@@ -1,0 +1,74 @@
+---
+layout: "./../../../layouts/Layout.astro"
+title: "Transform a SharePoint Web Part Zone into a jQuery Accordion"
+published: ""
+tags: []
+---
+
+# Transform a SharePoint Web Part Zone into a jQuery Accordion
+
+<time datetime="2014-03-27T00:00:00.000Z">
+**Published:**
+March 26th, 2014
+</time>
+
+- SharePoint 2010- jQuery- jQuery UI	
+
+I’ve developed another sandbox web part for SharePoint 2010! This time I’m tackling <a href="http://jqueryui.com/accordion/">jQuery UI Accordions</a>. I’ve again added some customization to the web part so you have more control over how the accordion displays. Most of the parameters are made available through the web part properties panel:
+
+1. active
+1. collapsible
+1. disabled
+1. event
+1. heightStyle
+
+A few that are missing or incomplete:
+
+1. active – boolean option to collapse all panels by default
+1. animate
+1. header
+1. icons
+
+## Overview of the Code
+
+I’ll include the code below just as I did with <a href="http://www.markadrake.com/blog/2014/03/03/transform-a-sharepoint-web-part-zone-into-jquery-tabs/">the tabs web part</a> from earlier. We add a few custom web part properties that can be edited, and use them to output some data on to the page. Most of the real coding is still found in the jQuery function further down the page. You’ll notice this is 95% similar to the last project.
+
+### Web Part
+
+### JavaScript (jQuery)
+
+Note that the web part itself includes this code in it’s minifed form (line 122).
+
+### Keep within Viewport
+
+There is one option above that is worth mentioning alone. The “Keep within Viewport” option is a usability feature I’ve built into the accordion. If you’ve ever used an accordion on a smaller device, like a cell phone, you’ve probably ran into the issue when activating a panel that your content slides off the page. This isn’t a friendly behavior, so this adds a check to make sure the accordion is visible on the page,
+
+## Download the Web Part
+
+Want to use it in your own environment?
+
+<blockquote>
+<a href="/web/20140327201539/http://www.markadrake.com/downloads/jQuery_UI_Accordion_Zone_WSP.zip">You’ll need the uploadable WSP file</a>.
+</blockquote>
+
+Want to make changes or explore the code?
+
+<blockquote>
+<a href="/web/20140327201539/http://www.markadrake.com/downloads/jQuery_UI_Accordion_Zone_PROJECT.zip">You’ll need the Visual Studio Project</a>.
+</blockquote>
+
+## Add to the Gallery, Use in Your Page, All Done!
+
+Please <a href="https://www.youtube.com/watch?v=fd8XMIb6Lwc&#38;list=UU8YCzt_PNS-N8UFYTtnUuZg">checkout the video I posted on YouTube for the jQuery Tabs web part</a>. This web part functions exactly the same, with a few more options. If somebody requests a new video covering this specific web part, I’ll record one and replace it. For now watch the previous how-to:
+
+## Help Me Improve It
+
+Here are some of the limitations as of **March 27th 2014**:
+
+1. Inclusion of jQuery and jQuery UI scripts are inline with the web part itself.
+1. Missing boolean option for jQuery Accordions active – to collapse all panels by default.
+1. Missing options for jQuery Accordions animate property.
+1. Missing options for jQuery Accordions header property.
+1. Missing options for jQuery Accordions icons property.
+1. Missing options for jQuery Tabs Show method.
+1. I’d love to remove the Appearance, Layout, &amp; Advanced groups and also have the jQuery group open by default.

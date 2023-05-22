@@ -1,0 +1,39 @@
+---
+layout: "./../../../layouts/Layout.astro"
+title: "Responsive Design – Turning Tabs into Accordions and Back Again"
+published: ""
+tags: []
+---
+
+# Responsive Design – Turning Tabs into Accordions and Back Again
+
+<time datetime="2013-09-06T00:00:00.000Z">
+**Published:**
+September 5th, 2013
+</time>
+
+- jQuery- jQuery UI- Responsive Design- Adaptive Design	
+
+Many of the sites I work on utilize the jQuery and jQuery UI library for displaying content in tabs or accordions. This really improves the readability of a long article or FAQ section of a website, but when used in a constricted environment like mobile devices – tabs can begin to overlap and form multiple rows. What I typically recommend is some JavaScript attached to the resize event to detect a mobile view (and so that it can be tested live in modern browsers) and convert tabs to accordions, or accordions back to tabs.
+
+<a href="https://codepen.io/markadrake/pen/rNKZVBp">You can view a demo of this script here</a>.
+
+It’s pretty simple so I’ll get straight to the code. On your site **you’ll already have HTML code that looks like this** to create your tabs:
+
+```Code```
+
+You may already be using a function in your own code that is called on window resize, but here is a quick example of how to **attach a function to the window resize event**:
+
+```Code```
+
+Then I define my updateUI function, which **will test for a mobile breakpoint  **and will call functions I create to either **change tabs to accordions** (for mobile) or **change accordions to tabs** (for desktop):
+
+```Code```
+
+I prefer to keep my functions minified, so **here are tabsToAccordions() and accordionsToTabs() in their minified form**:
+
+```Code```
+
+These scripts work great for OOTB jQuery Tabs and Accordions, but if you have made modified them in any way (default options, event handlers, DOM manipulation) you’ll need to edit the scripts above to accommodate your project.
+
+<a href="http://markadrake.com/examples/javascript/jquery/tabs-to-accordions/">You can view a demo of this script here</a>.

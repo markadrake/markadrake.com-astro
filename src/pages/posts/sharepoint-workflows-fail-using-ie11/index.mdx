@@ -1,0 +1,52 @@
+---
+layout: "./../../../layouts/Layout.astro"
+title: "SharePoint Workflows Fail Using IE11"
+published: ""
+tags: []
+---
+
+# SharePoint Workflows Fail Using IE11
+
+<time datetime="2013-12-13T00:00:00.000Z">
+**Published:**
+December 12th, 2013
+</time>
+
+- SharePoint 2010	
+
+Early adopters of Windows 8.1 and/or Internet Explorer 11 (IE11) may notice some issues when working in their SharePoint environments. I have not fully explored the bugs and nuisances caused by IE11 but discovered a particular issue with out-of-the-box (OOTB) workflows. After saving my publishing page and clicking the submit button to fire the workflow process, I’m greeted with a critical error.
+
+<img src="https://web.archive.org/web/20140111033145im_/http://www.markadrake.com/media/Capture-300x226.png" alt="Error in SharePoint Workflows with Internet Explorer 11"/>
+
+<blockquote>
+There has been a critical error while processing the form.
+</blockquote>
+
+The error message in full: There has been a critical error while processing the form. Click Start Over to load a new copy of the form. If this error persists, contact the support team for the Web site.Click Close to exit this message.
+
+The error details mention that the method ‘**addEventListener**‘ is not supported. This threw me for a loop for a good hour or so until I realized that SharePoint 2010 Master Pages by default, and best practice, include the X-UA-Compatible tag and it is set to IE8. Shame on me – because I’ve blogged about this very thing in the past. But for some reason this has always worked in IE9 and IE10 – rendering in IE8 mode and using a function that shouldn’t be available. So why does this break using IE11 all of a sudden?
+
+## The Explanation
+Some, or most or all, of Microsoft’s JavaScript code relies on browser detection. Instead of using the preferred way of detecting features, they assigned a number of variables to store information on the browser being used. If you were to view the source of this error page, before clicking “Start Over” or “Close” you could find the following values defined in the source code:
+
+```code```
+
+Armed with this information it was just a matter of time until I found the culprit – the file: **/inc/Core.js** has a function: **Window.AttachEventHandlers** causing this error. One of the very first things this function does is check the **strBrowser** value, and if set to 3 it attaches an event listener. No problem, except that Microsoft determined that strBrowser 3 supports the addEventListener method – in which this case they have been proven wrong. If you are using Internet Explorer 11 and your Master Page sets the compatibility tag to IE8 you will get this error! If you set the browser mode to any other value (9, 10, edge) the problem goes away.
+
+It’s always best to test if something is defined by using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof">JavaScript’s typeof operator</a> and comparing it to what it should be – in this case a function. Or use a feature detection library that does it for you – like <a href="http://modernizr.com/">Modernizr</a>.
+
+```code```
+
+## The Solution
+
+Anyone concerned with IE11 &amp; SharePoint 2010 (2007?) compatibility  and experiencing the error message regarding addEventListener has a few choices:
+
+1. Tell everyone on the (**choose:** internet, intranet) using IE11 to use compatibility mode (**joke**).
+1. Wait for Microsoft to fix it (**not recommended**, and a **joke**).
+1. Update Core.js manually in the hive (**not recommended**).
+1. Add this little bit of code to the bottom of your Master Page, just before the closing &lt;body&gt; tag (**recommended**):
+
+```code```
+
+## Feedback
+Let me know if you implement this code on your site and how it works. Did it solve any other issues you were experiencing? Are there other issues with SharePoint 2007 or 2010 OOTB functionality that needs to be fixed for IE11?

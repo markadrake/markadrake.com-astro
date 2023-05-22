@@ -1,0 +1,21 @@
+---
+layout: "./../../../layouts/Layout.astro"
+title: "Use XSLT to Limit Characters and Words in a String"
+published: ""
+tags: []
+---
+
+# Use XSLT to Limit Characters and Words in a String
+
+<time datetime="2013-12-03T00:00:00.000Z">
+**Published:**
+December 2nd, 2013
+</time>
+
+- SharePoint 2010	
+
+Usually my response to this kind of request is peppered with hate and discontent – who likes writing recursive templates in XSLT? Anyone?
+
+Good news for people who agree with me – there is actually a really simple solution to this! The following function calls allow you to limit the output of a string (to 49 characters in this example) and calculates where in the string the last space is (so we only break on words). You could update it to find other things – like periods for the end of a sentence, line breaks, special text, etc.
+
+Credit goes to <a href="http://stackoverflow.com/users/447128/treemonkey">TreeMonkey over at StackOverflow</a>.

@@ -1,0 +1,116 @@
+---
+layout: "./../../../layouts/Post.astro"
+title: "Custom Umbraco Property Editor Tutorial: Character Counts"
+published: "2015-01-22T00:00:00.000Z"
+tags: ["Umbraco 7"]
+---
+
+# Custom Umbraco Property Editor Tutorial: Character Counts
+
+<time datetime="2015-01-22T00:00:00.000Z">
+**Published:**
+January 21st, 2015
+</time>
+
+- Umbraco 7
+
+<img src="/assets/count.a7dd8036.gif" alt="Add character counts to Umbraco Text Fields"/>
+
+Today we will **create a custom Umbraco Property Editor**. This custom property editor adds a character counter to a <span style="color: #ff6600;">Textstring</span> or <span style="color: #ff6600;">Textbox</span> field. As you type, the character counter will countdown from the max value (we’ll assign that) to 0. Once it reaches 0, it will prevent any further entry. We found this to be most useful when setting up our <span style="color: #339966;">SEO Metadata Document Type</span> since it houses a few properties we needed to limit the character count on.
+
+I’ve added a coloring convention to this blog post &amp; I will try to follow it throughout my Umbraco related tutorials. <span style="color: #ff6600;">Data Types will be in orange</span> &amp; <span style="color: #339966;">Document Types will be in green</span>.
+
+You can skip all of this and <a href="https://github.com/markusdrake/Textbox-with-Character-Count">just download the source on GitHub</a>, if you like.
+
+## Before we go any further:
+
+- Yes - you can add a description for your content authors to “please only type 50 characters”. And I recommend you still do!
+- Yes - you can add a regular expression to limit the amount of characters typed into the field. And I recommend you still do this too!
+Where I feel Umbraco falls short is in the experience for the content author. When a regex is entered for validation there is barely any feedback given to the user why what they have entered is wrong. And the validation is re-active instead of pro-active. It only updates after the user has entered in bad data. The solution: <span style="color: #ff6600;">a custom data type</span> that provides immediate feedback to the content author! And it will be configured to use the property editor we are making today.
+
+## So let’s create our custom property editor.
+Under the ”**App_Plugins**” folder create a new folder to house our new files. I created a folder called ”**TextboxWithCharacterCount**”. I find it easier to reuse the name for the folder, files, controllers, etc *but it doesn’t matter what you call them!*
+
+You’ll need to create 3 files in the folder you just created:
+
+1. A Package Manifest
+	- I named this ”**package.manifest**”
+1. An HTML Template
+	- I named this ”**TextboxWithCharacterCount.html**”
+1. An Angular Controller
+	- I named this ”**TextboxWithCharacterCount.controller.js**”
+
+### The Package Manifest
+
+The package manifest will be the first file you create. This file describes our plugin and provides instructions to Umbraco on what files to load. For more information on this step, see ”<a href="http://umbraco.github.io/Belle/#/tutorials/CreatingAPropertyEditor">Creating a Property Editor</a>“.
+
+**Important:** The ”**alias**” property must be unique in your environment, and anyone who uses your code in their own Umbraco environment. For that reason, I prefix the alias with “Scylla.” creating an artificial namespace for all the plugins we create in-house. Prefix yours with something that makes it unique.
+
+**Not so Important:** The ”**name**” property is the public-facing label Umbraco will use. This does not have to be unique and allows us to give our plugin a more friendly name.
+
+Here is our package manifest:
+
+<a href="https://gist.github.com/markadrake/ab2ab70b39aac1be53baf748991e2d85/raw/910f84360f40b16167ea4f21cafbe0fe877f0f71/package.manifest" style="float:right">view raw</a>
+<a href="https://gist.github.com/markadrake/ab2ab70b39aac1be53baf748991e2d85#file-package-manifest">
+	package.manifest
+</a>
+
+### The HTML Template &amp; The Angular Controller
+
+These two files work together to provide the interface. If you don’t know anything about Angular don’t fret - I’m pretty new to it too. What we are doing here is writing an Angular Controller, to interact with our HTML and provide back to Umbraco a value in the form of a JavaScript variable.
+
+Again, looking at ”<a href="http://umbraco.github.io/Belle/#/tutorials/CreatingAPropertyEditor">Creating a Property Editor</a>” may give more insight. The page lists a couple of resources for learning Angular too:
+
+- <a href="http://www.egghead.io/">Egghead.io</a>
+- <a href="http://docs.angularjs.org/tutorial">Angularjs.org</a>
+
+Here is our HTML File:
+
+<a href="https://gist.github.com/markadrake/ab2ab70b39aac1be53baf748991e2d85/raw/910f84360f40b16167ea4f21cafbe0fe877f0f71/TextboxWithCharacterCount.html" style="float:right">view raw</a>
+<a href="https://gist.github.com/markadrake/ab2ab70b39aac1be53baf748991e2d85#file-textboxwithcharactercount-html">TextboxWithCharacterCount.html</a>
+
+And here is our Angular Controller:
+
+<a href="https://gist.github.com/markadrake/ab2ab70b39aac1be53baf748991e2d85/raw/910f84360f40b16167ea4f21cafbe0fe877f0f71/TextboxWithCharacterCount.controller.js" style="float:right">view raw</a>
+<a href="https://gist.github.com/markadrake/ab2ab70b39aac1be53baf748991e2d85#file-textboxwithcharactercount-controller-js"></a>
+
+## Now we can put it to use!
+Your file structure should look something like this:
+
+<img src="/assets/filestructure.1de1fc6b.png" alt="File Structure for the Custom Umbraco Property Editor"/>
+
+Note that after uploading these files to your web server, you may need to recycle it for Umbraco to pick up the changes. I didn’t have to - a hard refresh in my browser window loaded our new property editor just fine.
+
+### Create Your Data Type
+
+1. Log into the Umbraco Back Office and load your “Developer” section.
+1. Right click “Data Types” to create a new one.
+1. Give it a name: “Textbox with Character Count”.
+1. Set the property editor to: “Textbox with Character Count”.
+	- If you do not see your property editor I would recycle the site in IIS, if it’s still not available I would verify the 3 files have the exact code displayed above.
+1. Enter a Maximum value - this dictates how many characters you can type into the input field.
+	- Not sure how many characters you want to limit it to? Don’t worry - this is used as a default value. It can be overridden later.
+
+### Add The Data Type to a Document Type
+
+This is easy enough - find the <span style="color: #008000;">document type</span> you want to use this field in and add new property. For the **type** you’ll want to choose our new data type <span style="color: #ff6600;">Textbox with Character Count</span>.
+
+**Important:** You can also update any existing property to use this field. Just remember that whatever data is stored in the field already will be truncated next time you go to edit it.
+
+## But we don’t always want the same character limit! How can we change this?
+
+One step ahead of you! I’ve built in an override capability into the Angular Controller. It’s really easy to use, but it relies on a regular expression.
+
+When we created the <span style="color: #ff6600;">data type</span> we set a **default maximum** value. Instead of creating various data types for everyone character amount we want, I’ve decided to **read the description field** and if a number is found, this number will override the default value. Pretty simple!
+
+Here is an example. In the screenshot you’ll see two properties I’ve defined. They both use <span style="color: #ff6600;">Textbox with Character Count</span>, but one has the **Description** filled out.
+
+<img src="/assets/editingproperties.355f8f98.png" alt="Umbraco - Editing Properties"/>
+
+Now when I go to edit my content - the two properties will have different max values set.
+
+<img src="/assets/example.d3be4706.png" alt="Umbraco - Custom Property Example"/>
+
+## Thanks!
+
+Please share your thoughts &amp; comments below. I try to read and respond to as many as I can. And if you would like to contribute or raise an issue with the code then <a href="https://gist.github.com/markadrake/ab2ab70b39aac1be53baf748991e2d85">visit the Gist on GitHub</a>.

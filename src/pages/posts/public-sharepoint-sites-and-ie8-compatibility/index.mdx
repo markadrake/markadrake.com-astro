@@ -1,0 +1,44 @@
+---
+layout: "./../../../layouts/Layout.astro"
+title: "Public SharePoint Sites and IE8 Compatibility"
+published: ""
+tags: []
+---
+
+# Public SharePoint Sites and IE8 Compatibility
+
+<time datetime="2013-11-21T00:00:00.000Z">
+**Published:**
+November 20th, 2013
+</time>
+
+- SharePoint 2010	
+
+<a href="http://get-spblog.com/2012/05/23/html5-sp2010/">Removing the X-UA-Compatible tag from a SharePoint 2010 can have a lot of nuisances</a>. This tag is there to force newer versions of IE to render the site in IE8 mode to avoid issues with new standards or updates mainly to the JS engine. But at the same time, it forces newer versions of Internet Explorer – that already support media queries and html5 elements, to render in IE8 mode and require the use of polyfills to implement the responsive design. This requires additional resources (polyfills) to be requested, downloaded, rendered, and executed – to implement something that is otherwise supported natively by the browser.
+
+## Don’t Serve if it’s Not Needed
+
+I prefer to let IE9+ do their thing, since they already recognize our common pollyfills (media queries and html5 elements), and only implement the polyfills for when they are actually needed – *visitors using IE8* , and when *somebody is making changes to the site*.
+
+There are ways around this of course – one is to create two master pages and keep the X-UA-Compatible tag on the system master page. But this adds additional overhead to the project and forces you to maintain code changes to 2 master pages. Instead we can use a Security Trimmed Control to test whether there is even a need for this tag, else hiding it from the browser:
+
+```Code```
+
+Note the **Permissions** attribute above. We use it here to check if the current user has the ability to customize pages, and if he or she does, the X-UA-Compatible tag is output to prevent the nuisances explained above. If the test comes back false, we know it’s a visitor who isn’t going to require the same level of compatibility with IE8. So we hide it in this case, and let the browser render in the most recent version.
+
+## So what are the advantages?
+
+1. Clients only need to maintain one master page instead of two.
+1. IE9+ downloads, renders, and executes two less polyfills.
+1. Native features aren’t replaced by polyfills – that take longer to execute.
+1. IE8 specific CSS no longer needs to be rendered.
+1. IE8 specific JS is no longer downloaded.
+1. IE8 is still responsive.
+1. SharePoint Design Mode functionality is unscathed by the change.
+
+## More About the SPSecurityTrimmedControl
+There are other attributes as well – **PermissionsString** and **AuthenticationRestrictions**. Between these two you have a wide range of control over when something should be displayed. These links will open in a new window:
+
+1. <a href="http://msdn.microsoft.com/en-us/library/microsoft.sharepoint.webcontrols.spsecuritytrimmedcontrol_members(v=office.14).aspx">Reference for SPSecuirtyTrimmedControl</a>
+1. <a href="http://msdn.microsoft.com/en-us/library/microsoft.sharepoint.webcontrols.spsecuritytrimmedcontrol.authenticationrestrictions(v=office.14).aspx">Reference for AuthenticationRestrictions Property</a> and <a href="http://msdn.microsoft.com/EN-US/library/ms437559">Accepted Values</a>
+1. <a href="http://msdn.microsoft.com/en-us/library/microsoft.sharepoint.webcontrols.spsecuritytrimmedcontrol.permissionsstring(v=office.14).aspx">Reference for PermissionsString Property</a> and <a href="http://msdn.microsoft.com/EN-US/library/ms412690">Accepted Values</a>

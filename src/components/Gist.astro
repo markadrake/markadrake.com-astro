@@ -1,0 +1,11 @@
+---
+export interface Props {
+	key: string;
+}
+
+const { key } = Astro.props;
+
+const src = `https://gist.github.com/markadrake/${key}.js`;
+---
+
+<script src=src></script>

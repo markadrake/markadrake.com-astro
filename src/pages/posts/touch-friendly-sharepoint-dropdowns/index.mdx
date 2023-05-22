@@ -1,0 +1,60 @@
+---
+layout: "./../../../layouts/Layout.astro"
+title: "Touch Friendly SharePoint Dropdowns"
+published: ""
+tags: []
+---
+
+# Touch Friendly SharePoint Dropdowns
+
+<time datetime="2014-02-25T00:00:00.000Z">
+**Published:**
+February 24th, 2014
+</time>
+
+- SharePoint 2010- Front End	
+
+I recently had the pleasure of trouble shooting SharePoint 2010′s drop down menus on a Microsoft Surface device. The common user experience for drop down menus on touch-enabled devices is pretty simple. On first touch, the menu should open, and a consecutive touch should take you to the URL of the page. Here is the why and the how to provide a better user experience for new versions of IE and touch-devices.
+
+## Microsoft has incorporated some big changes to touch events in JavaScript.
+
+Instead of bothering everyone with the details, please read this article from the IE Dev Center, “<a href="http://msdn.microsoft.com/en-us/library/ie/jj583807(v=vs.85).aspx">Make your site touch-ready</a>”. In reality, all you need to know is that since version 10, Internet Explorer does not support the events that have become a standard over the past couple of years. The **touchstart** and **touchend** events are not only depreciated, but no longer supported at all.
+
+### This may affect your dropdown menus!
+
+We implement drop down or mega menus in almost all of our SharePoint branding projects. These types of menus are setup so that **on hover** they reveal a hidden sub-menu. When you are concerned with responsive design, you may go as far as writing custom event handlers to handle the **touchstart** event. The preferred user experience is:
+
+1. On first touch: reveal the drop down menu should be revealed.
+1. On second touch: navigate to the link’s URL.
+
+Some browsers handle this gracefully by default. If you were to visit a site with a drop down menu on an iPad or iPhone for example, Mobile Safari is omniscient enough to activate the hover on **first touch** and navigate to the link’s location on the **second touch**. What you will soon find out is the new versions of IE do not implement this natively. You’ll most likely encounter this issue on their new Surface line of products, but may also have some Windows Phone users who also have this experience.
+
+I found a quick and simple solution to the issue at hand. If you give your menu links (with a drop down) a new attribute, **aria-haspopup**, and set it’s value to **true**, IE handles the touch as a hover in the same way as an Apple device does. By applying this to your menu link elements you get the preferred behavior as described above. Your touch enabled device running version 10 or 11 of IE will, on **first touch** reveal the drop down and on **second touch** navigate to the links URL.
+
+## Just use this HTML attribute instead of writing a bunch of JS code for now.
+
+You can read more about <a href="http://msdn.microsoft.com/en-us/library/ie/jj152135(v=vs.85).aspx">**aria-haspopup** attribute</a> at the IE Dev Center. If you are not able to edit the &lt;a&gt; elements yourself, which is most likely the case because we are working with SharePoint, you can use JavaScript to add this attribute to menu items with children. You may need to adjust the example below if you have heavily modified SharePoint or using a custom navigation provider:
+
+**With jQuery**
+
+<a href="https://gist.github.com/markadrake/b150a839727d8372b45ddda026dbc4d2/raw/8445feee572be994402e8efe411d42ba8baffc46/With%20jQuery.js" style="float:right">view raw</a>
+<a href="https://gist.github.com/markadrake/b150a839727d8372b45ddda026dbc4d2#file-with-jquery-js">With jQuery.js</a>
+
+**With JavaScript**
+
+<a href="https://gist.github.com/markadrake/b150a839727d8372b45ddda026dbc4d2/raw/8445feee572be994402e8efe411d42ba8baffc46/With%20JavaScript.js" style="float:right">view raw</a>
+<a href="https://gist.github.com/markadrake/b150a839727d8372b45ddda026dbc4d2#file-with-javascript-js">With JavaScript.js</a>
+
+### Interact with live examples of pointer events and gestures.
+
+For a walk-through of these changes and some great examples you can test for yourself visit <a href="http://www.sitepoint.com/unifying-touch-and-mouse-with-pointer-events/">“Unifying Touch and Mouse with Pointer Events” by David Rousset</a>.
+
+## Who uses Internet Explorer 10 or 11 anyways?
+
+Well, at the time of this writing there have already been strong reports that out of everyone using Internet Explorer – 24% of them are running version 10. If that doesn’t move you, add that the company’s focus is now centered around it’s Surface line of tablets – all which come with Windows 8 or Windows 8.1. For company intranets – the concern to support these new versions of IE and new hardware may not have reached you yet. If you are using SharePoint to run your public internet site – you may need to fire up a Surface tablet and begin testing.
+
+## What is ARIA?
+
+ARIA is important when you begin working towards developing (or designing) more accessible web applications and websites. By *accessible* I mean tailoring our application (or website) so that people with disabilities using assistive technologies can still access all content of the site and use all features provided. If you use components of jQuery, like jQuery UI, you’d be surprised to know they are advocates for creating accessible widgets and components already. You can discover more about <a href="http://wiki.jqueryui.com/w/page/43766322/Accessibility-Overview">jQuery UI and ARIA support in the “Accessibility-Overview</a>“.
+
+Read more about <a href="http://www.w3.org/WAI/PF/aria/">ARIA at W3C</a>.

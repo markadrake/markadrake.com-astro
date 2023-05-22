@@ -29,40 +29,12 @@ const { title, breadcrumbs = true } = Astro.props;
 </body>
 </html>
 <style is:global lang="scss">
-  :root {
-    --accent: 124, 58, 237;
-    --accent-gradient: linear-gradient(
-      45deg,
-      rgb(var(--accent)),
-      #da62c4 30%,
-      white 60%
-    );
-  }
-
-  html {
-    font-family: Open Sans, sans-serif;
-	font-size: 18px;
-    background-color: #f6f6f6;
-  }
-
-  p, li {
-	line-height: 1.5;
-  }
-
-  code {
-    font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-      DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-  }
+@import "./../themes.scss";
+@import "./../typography.scss";
+@import "./../media.scss";
 
   main {
 	max-width: 56.8888888889rem;
 	margin: auto;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    html {
-      color: #fff;
-      background: #222;
-    }
   }
 </style>

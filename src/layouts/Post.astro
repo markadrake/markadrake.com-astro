@@ -1,9 +1,24 @@
 ---
 import Layout from "./Layout.astro";
+const { frontmatter } = Astro.props;
 ---
 
 <Layout title="Post Title">
 	<article>
+		<h1 class="heading">{frontmatter.title}</h1>
+
+		<time datetime={frontmatter.published}>
+			<strong>Published:</strong>
+			January 21st, 2015
+		</time>
+
+		<ul>
+			{frontmatter.tags.map(tag => 
+				<li>{tag}</li>
+			)}
+		</ul>
+
 		<slot />
+
 	</article>
 </Layout>

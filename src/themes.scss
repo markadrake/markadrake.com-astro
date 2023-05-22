@@ -1,0 +1,24 @@
+/*
+	Regular settings
+*/
+:root {
+	--background: #efefef;
+	--foreground: #222;
+	--foreground-link: #222;
+	--social-twitter: #1DA1F2;
+	--social-linkedin: #0A66C2;
+	--social-youtube: #FF0000;
+	--social-rumble: #95c455;
+	--social-instagram: #E4405F;
+}
+
+/*
+	Dark mode settings
+*/
+@media (prefers-color-scheme: dark) {
+	:root {
+		--background: #222;
+		--foreground: #fff;
+		--foreground-link: rgb(95, 212, 255);
+	}
+}

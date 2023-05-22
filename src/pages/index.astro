@@ -1,50 +1,48 @@
 ---
+import { a } from '../../.netlify/functions-internal/chunks/astro.47581b98.mjs';
 import Layout from '../layouts/Layout.astro';
-const allPosts = await Astro.glob("./posts/**/*.mdx");
+
+// Find all posts
+const allPosts = await Astro.glob("./posts/**/*.mdx")
+
+// Sort the posts by published data
+allPosts.sort((a, b) => 
+	b.frontmatter.published.localeCompare(a.frontmatter.published)
+);
+
+// Organize by calendar year
+let postsByYear = {};
+allPosts.map(post => {
+	const year = post.frontmatter.published.substr(0, 4);
+	if(postsByYear[year]) {
+		postsByYear[year].push(post);
+	} else {
+		postsByYear[year] = [post];
+	}
+});
 ---
 
-<Layout title="Welcome to Astro." breadcrumbs={false}>
-	<ul>
-		{allPosts.map((post) => <li><a href={post.url}>{post.frontmatter.title}</a></li>)}
-	</ul>		
-</Layout>
+<Layout 
+title="Welcome to Astro." 
+breadcrumbs={false}>
 
-<style>
-	h1 {
-		font-size: 3rem;
-		font-weight: 800;
-		margin: 0;
-	}
-	.text-gradient {
-		background-image: var(--accent-gradient);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-size: 400%;
-		background-position: 0%;
-	}
-	.instructions {
-		line-height: 1.6;
-		margin: 1rem 0;
-		border: 1px solid rgba(var(--accent), 25%);
-		background-color: white;
-		padding: 1rem;
-		border-radius: 0.4rem;
-	}
-	.instructions code {
-		font-size: 0.875em;
-		font-weight: bold;
-		background: rgba(var(--accent), 12%);
-		color: rgb(var(--accent));
-		border-radius: 4px;
-		padding: 0.3em 0.45em;
-	}
-	.instructions strong {
-		color: rgb(var(--accent));
-	}
-	.link-card-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-		gap: 1rem;
-		padding: 0;
-	}
-</style>
+	{Object.keys(postsByYear).sort((a, b) => b - a).map((key) => 
+
+		<div>
+			<p>{key}</p>
+
+			{postsByYear[key].map((post) =>
+
+				<div>
+					<p>
+						<a href={post.url}>
+							{post.frontmatter.title}
+						</a>
+						{post.frontmatter.published}
+					</p>
+				</div>
+			)}
+		</div>
+
+	)}
+</Layout>

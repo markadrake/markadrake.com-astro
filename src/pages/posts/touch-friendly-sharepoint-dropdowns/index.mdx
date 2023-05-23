@@ -1,18 +1,10 @@
 ---
-layout: "./../../../layouts/Layout.astro"
+layout: "./../../../layouts/Post.astro"
 title: "Touch Friendly SharePoint Dropdowns"
 published: "2014-02-25"
-tags: []
+tags: [ "Sharepoint 2010" ]
 ---
-
-# Touch Friendly SharePoint Dropdowns
-
-<time datetime={frontmatter.published}>
-**Published:**
-February 24th, 2014
-</time>
-
-- SharePoint 2010- Front End	
+import Gist from "./../../../components/Gist.astro";
 
 I recently had the pleasure of trouble shooting SharePoint 2010′s drop down menus on a Microsoft Surface device. The common user experience for drop down menus on touch-enabled devices is pretty simple. On first touch, the menu should open, and a consecutive touch should take you to the URL of the page. Here is the why and the how to provide a better user experience for new versions of IE and touch-devices.
 
@@ -37,13 +29,11 @@ You can read more about <a href="http://msdn.microsoft.com/en-us/library/ie/jj15
 
 **With jQuery**
 
-<a href="https://gist.github.com/markadrake/b150a839727d8372b45ddda026dbc4d2/raw/8445feee572be994402e8efe411d42ba8baffc46/With%20jQuery.js" style="float:right">view raw</a>
-<a href="https://gist.github.com/markadrake/b150a839727d8372b45ddda026dbc4d2#file-with-jquery-js">With jQuery.js</a>
+<Gist id="b150a839727d8372b45ddda026dbc4d2" file="With jQuery.js" />
 
 **With JavaScript**
 
-<a href="https://gist.github.com/markadrake/b150a839727d8372b45ddda026dbc4d2/raw/8445feee572be994402e8efe411d42ba8baffc46/With%20JavaScript.js" style="float:right">view raw</a>
-<a href="https://gist.github.com/markadrake/b150a839727d8372b45ddda026dbc4d2#file-with-javascript-js">With JavaScript.js</a>
+<Gist id="b150a839727d8372b45ddda026dbc4d2" file="With JavaScript.js" />
 
 ### Interact with live examples of pointer events and gestures.
 

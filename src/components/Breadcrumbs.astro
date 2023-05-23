@@ -1,10 +1,22 @@
 ---
-const location = Astro.request.url;
+import { capitalCase } from "case-anything";
+
+const location = Astro.request.url.split("/");
 ---
-{location}
+
 <li>
 	<a href="/">Home</a>
 </li>
-<li>
-	<a href=""></a>
-</li>
+
+{location.slice(3, location.length - 1).map(path => 
+	<li>&rarr;</li>
+	<li>
+		<a href="/">{capitalCase(path, { keepSpecialCharacters: false })}</a>
+	</li>
+)}
+
+<style lang="scss">
+	li + li {
+		margin-left: 0.25rem;
+	}
+</style>

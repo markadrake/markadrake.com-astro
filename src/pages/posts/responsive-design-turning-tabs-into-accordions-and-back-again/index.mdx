@@ -1,18 +1,9 @@
 ---
-layout: "./../../../layouts/Layout.astro"
+layout: "./../../../layouts/Post.astro"
 title: "Responsive Design – Turning Tabs into Accordions and Back Again"
 published: "2013-09-06"
-tags: []
+tags: [ "jQuery" ]
 ---
-
-# Responsive Design – Turning Tabs into Accordions and Back Again
-
-<time datetime={frontmatter.published}>
-**Published:**
-September 5th, 2013
-</time>
-
-- jQuery- jQuery UI- Responsive Design- Adaptive Design	
 
 Many of the sites I work on utilize the jQuery and jQuery UI library for displaying content in tabs or accordions. This really improves the readability of a long article or FAQ section of a website, but when used in a constricted environment like mobile devices – tabs can begin to overlap and form multiple rows. What I typically recommend is some JavaScript attached to the resize event to detect a mobile view (and so that it can be tested live in modern browsers) and convert tabs to accordions, or accordions back to tabs.
 
@@ -20,20 +11,116 @@ Many of the sites I work on utilize the jQuery and jQuery UI library for display
 
 It’s pretty simple so I’ll get straight to the code. On your site **you’ll already have HTML code that looks like this** to create your tabs:
 
-```Code```
+```
+<div class="tabs">
+	<ul>
+		<li><a href="#tabs-1">Example Tab</a></li>
+		<li><a href="#tabs-2">Example Tab</a></li>
+		<li><a href="#tabs-3">Example Tab</a></li>
+	</ul>
+	<div id="tabs-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In auctor, nisi in blandit dapibus, est ante bibendum lacus, a molestie ligula elit nec mi. Aliquam imperdiet lacinia augue, vitae vestibulum lacus suscipit vitae. Nulla fringilla commodo mi, eget suscipit odio adipiscing sed.</div>
+	<div id="tabs-2">Quisque fermentum feugiat molestie. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam at ligula felis.</div>
+	<div id="tabs-3">Vivamus accumsan arcu non lacus sagittis vulputate. Nullam odio magna, pellentesque eget sollicitudin non, rutrum sodales libero. Nullam sagittis, eros et tempor hendrerit, purus nunc viverra sapien, in molestie tortor elit nec enim. Sed placerat, risus a aliquet dapibus, nisl dui auctor erat, nec pellentesque libero justo ac risus. Vivamus scelerisque leo at felis adipiscing lacinia. Ut dictum posuere hendrerit.</div>
+</div>
+```
 
 You may already be using a function in your own code that is called on window resize, but here is a quick example of how to **attach a function to the window resize event**:
 
-```Code```
+```
+$(document).ready(function(){
+	// event handler for window resize
+	$(window).resize(function(e){
+		updateUI();
+	});
+	updateUI(); 
+});
+```
 
 Then I define my updateUI function, which **will test for a mobile breakpoint  **and will call functions I create to either **change tabs to accordions** (for mobile) or **change accordions to tabs** (for desktop):
 
-```Code```
+```
+// event handler for window resize
+function updateUI(){
+ 
+ 
+ 
+ 
+	if($(window).width() <= 480){
+ 
+ 
+ 
+ 
+		// mobile view instructions
+		tabsToAccordions();
+ 
+ 
+ 
+ 
+	} else {
+ 
+ 
+ 
+ 
+		// desktop view instructions
+		accordionsToTabs();
+	}
+ 
+ 
+ 
+ 
+}
+ 
+ 
+ 
+ 
+// changes tabs to accordions (jquery ui)
+function tabsToAccordions(){
+	$('.tabs').each(function(){
+		var a = $('<div class="accordion">');
+		var b = new Array();
+		$(this).find('>ul>li').each(function(){
+			b.push('<h3>'+$(this).html()+'</h3>');
+		});
+		var c = new Array();
+		$(this).find('>div').each(function(){
+			c.push('<div>'+$(this).html()+'</div>');
+		});
+		for(var i = 0; i < b.length; i++){
+			a.append(b[i]).append(c[i]);
+		}
+		$(this).before(a);
+		$(this).remove();
+	})
+	$('.accordion').accordion()
+}
+ 
+ 
+ 
+ 
+// changes accordions to tabs (jquery ui)
+function accordionsToTabs(){
+	$('.accordion').each(function(){
+		var a = $('<div class="tabs">');
+		var count = 0;
+		var b = $('<ul>');
+		$(this).find('>h3').each(function(){
+			count++;
+			b.append('<li><a href="#tabs-'+count+'">'+$(this).text()+'</a></li>');
+		});
+		var count = 0;
+		var c = $('');
+		$(this).find('>div').each(function(){
+			count++;
+			c=c.add('<divid="tabs-'+count+'">'+$(this).html()+'</div>');
+		});
+		a.append(b).append(c);
+		$(this).before(a);
+		$(this).remove();
+	});
+	$('.tabs').tabs();
+}
+```
 
 I prefer to keep my functions minified, so **here are tabsToAccordions() and accordionsToTabs() in their minified form**:
 
-```Code```
-
 These scripts work great for OOTB jQuery Tabs and Accordions, but if you have made modified them in any way (default options, event handlers, DOM manipulation) you’ll need to edit the scripts above to accommodate your project.
-
-<a href="http://markadrake.com/examples/javascript/jquery/tabs-to-accordions/">You can view a demo of this script here</a>.

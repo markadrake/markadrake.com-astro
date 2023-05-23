@@ -1,15 +1,144 @@
 ---
-layout: "./../../../layouts/Layout.astro"
+layout: "./../../../layouts/Post.astro"
 title: "Responsive Design Concerns for Windows Phone and IE Compatibility Modes"
-published: "2000-01-01"
-tags: []
+published: "2013-05-31"
+tags: [ "SharePoint 2010" ]
 ---
 
-# Responsive Design Concerns for Windows Phone and IE Compatibility Modes
+> Update: Microsoft recently patched this issue and properly sets the device-width when using the `<meta>` tag in conjunction with the @viewport rule. This issue mainly affected Windows Phone Users (noticeably the Lumia 920). This issue was only aggravated more by X-UA-Compatible tags.
 
-<time datetime={frontmatter.published}>
-**Published:**
-December 31st, 1999
-</time>
+I recently had the pleasure of implementing a responsive design for a SharePoint 2007 site. During our user testing we discovered that the Nokia Lumia 920 (a WP8 device) was not displaying the site as intended. After a little trial and error I turned to Google and quickly found that this was a Microsoft-confirmed bug.
 
-- Responsive Design	
+For responsive design you have two choices, one is the non-standards but widely-used and adopted viewport meta tag. The other option is to use the latest W3C draft for CSS Device Adapation using the @viewport rule. In an effort to always use the more standards-compliant method and to future-proof our designs we use both methods when implementing responsive sites.
+
+```
+@-webkit-viewport {width:device-width;}
+@-moz-viewport {width:device-width;}
+@-ms-viewport {width:device-width;}
+@-o-viewport {width:device-width;}
+@viewport {width:device-width;}
+```
+
+This @viewport rule fixes an issue with IE10's snap mode, but a bug has crept up that affects WP8 devices. Using our Nokia Lumia 920 we saw the browser render the page at the native device resolution 768 x 1280 pixels. It seems the call for "device-width" gets the actual pixels of the screen instead of the optimal viewing area (or "rendering surface").
+
+Here are are 2 articles, one by Matt Snow and the other by Derek Johnson; both of these guys go more in-depth about this issue:
+
+- Matt Snow - "[Responsive Design in IE10 on Windows Phone 8](http://mattstow.com/responsive-design-in-ie10-on-windows-phone-8.html)"
+- Derek Johnson - "[Why I Think We Shouldn't Use CSS ViewPort in IE10 for Now](https://web.archive.org/web/20190617064636/http://nostrongbeliefs.com/why-i-think-we-shouldnt-use-css-viewport-in-ie10-for-now/)"
+
+## Ingredients for a fix
+
+With a little JavaScript we should be able to fix the issue. While we wait for Microsoft to publish a fix to the affected devices, you can place this code in the `<head>` tag of your web site, before any other javascript.
+
+Here is the JavaScript featured on github by Matt Stow:
+
+```
+(function() {
+ if ("-ms-user-select" in document.documentElement.style && navigator.userAgent.match(/IEMobile\/10\.0/)) {
+ var msViewportStyle = document.createElement("style");
+ msViewportStyle.appendChild(
+ document.createTextNode("@-ms-viewport{width:auto!important}")
+ );
+ document.getElementsByTagName("head")[0].appendChild(msViewportStyle);
+ }
+ })();
+ ```
+
+I added my JS, why doesn't this work?
+Unfortunately for me, my troubleshooting didn't stop here. After applying the recommended changes to my CSS files and JS files the site was still displaying the desktop view. After some back and forth trial and error I decided to check my navigator.userAgent string on the Lumia 920, just to verify the JS "fix" would run - and to my surprise I had a totally different user agent value then the above bloggers.
+
+## There are multiple user agents!
+
+Let's look at all the different user agent strings that Microsoft provides in Mobile IE - don't forget, there are two browser modes to choose from under settings! For common IE compatible tags (IE7 through 9) this gives us 8 different user agent strings!
+
+<table border="0">
+<tbody>
+<tr>
+<td>
+**User Agent String While in "Desktop Mode"**
+</td>
+<td>
+**User Agent String While in "Mobile Mode"**
+</td>
+</tr>
+<tr>
+<td>
+<p style="padding-left: 60px;"><strong>No X-UA-Compatible Tag:</strong> Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0; ARM; Touch; WPDesktop)</p>
+</td>
+<td>
+<p style="padding-left: 60px;"><strong>No X-UA-Compatible Tag:</strong> Mozilla/5.0 (compatible; MSIE 10.0; Windows Phone 8.0; Trident/6.0; IEMobile/10.0; ARM; Touch; NOKIA; Lumia 920)</p>
+</td>
+</tr>
+<tr>
+<td>
+<p style="padding-left: 60px;"><strong>IE9 Compatible Tag:</strong> Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.2; Trident/5.0; XBLWP7; ZuneWP7)</p>
+</td>
+<td>
+<p style="padding-left: 60px;"><strong>IE9 Compatible Tag:</strong> Mozilla/5.0 (compatible: MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0; NOKIA; Lumia 920)</p>
+</td>
+</tr>
+<tr>
+<td>
+<p style="padding-left: 60px;"><strong>IE8 Compatible Tag:</strong> Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.2; Trident/4.0; XBLWP7; ZuneWP7)</p>
+</td>
+<td>
+<p style="padding-left: 60px;"><strong>IE8 Compatible Tag:</strong> Mozilla/4.0 (compatible; MSIE 8.0; Windows Phone OS 7.5; Trident/4.0; IEMobile/8.0; NOKIA; Lumia 920)</p>
+</td>
+</tr>
+<tr>
+<td>
+<p style="padding-left: 60px;"><strong>IE7 Compatible Tag:</strong> Mozilla/4.0 (compatible; MSIE7.0; Windows NT 6.2; Trident/3.1; XBLWP7; ZuneWP7)</p>
+</td>
+<td>
+<p style="padding-left: 60px;"><strong>IE7 Compatible Tag:</strong> Mozilla/4.0 (compatible; MSIE 7.0; Windows Phone OS 7.0; Trident /3.1; IEMobile/7.0; NOKIA; Lumia 920)</p>
+</td>
+</tr>
+</tbody>
+</table>
+
+So what's the common denominator?
+
+I don't know anybody who switches their website preference from desktop to mobile on their phone, tablet, or other mobile device. I certainly don't and my clients certainly don't. When I visit a website I expect it to present usable interface and provide a quality user experience!
+
+Considering some sites on the internet make use of the X-UA-Compatible tag, we need to modify Matt's script ever so slightly (he's done the hard work).
+
+1. You can't detect this device by looking for only IEMobile, Lumia 920, or Windows Phone OS in the user-agent string; these are only included when using the mobile website preference.
+1. You can't detect this device by looking for only XBLWP7,  WPDesktop, or ZuneWP7 in the user-agent string; these are only included when using the desktop website preference
+
+The only thing you can do to detect a WP device is to use multiple or statements using the string.match() method to look for identifiers. For mobile mode, "IEMobile" is the safest string to use. For desktop mode, use "ZuneWP7" and another or statement for "WPDesktop". These 3 strings combined should identify a device affected by this bug and need the JS fix.
+
+I've updated the JS code to the following:
+
+```
+(function() {
+ if ("-ms-user-select" in document.documentElement.style &&
+ (navigator.userAgent.match(/IEMobile/) ||
+ navigator.userAgent.match(/ZuneWP7/) ||
+ navigator.userAgent.match(/WPDesktop/))) {
+ var msViewportStyle = document.createElement("style");
+ msViewportStyle.appendChild(
+ document.createTextNode("@-ms-viewport{width:auto!important}")
+ );
+ document.getElementsByTagName("head")[0].appendChild(msViewportStyle);
+ }
+})();
+```
+
+Now we have something working!
+
+Lumia 920 users can point their browser to the following page and see that the above JavaScript code, added to the previous page now shows the responsive layout instead.
+
+- No X-UA-Compatible Tag: http://www.markadrake.com/examples/lumia920/responsive-fix.html
+- IE9 Compatible Tag: http://www.markadrake.com/examples/lumia920/responsive-fix-ie9.html
+- IE8 Compatible Tag: http://www.markadrake.com/examples/lumia920/responsive-fix-ie8.html
+- IE7 Compatible Tag: http://www.markadrake.com/examples/lumia920/responsive-fix-ie7.html
+
+## IE7 and IE8 compatibility still not working
+
+After updating the above JavaScript to detect my device properly, and verifying this by appending a test message to the body of the page I discovered that no matter what I did my site refused to look good with the IE7 compatibility meta tag, which was part of the SharePoint 2007 Master Page this client was using. In other cases, like most SharePoint 2010 sites we implement, they use a IE8 compatibility meta tag.
+
+Our final solution was to recommend a two-master page scheme. One copy of the master page would be used on the front-end and we stripped the compatibility tag. The other copy of the master page would be used for system pages and we left the compatibility tag alone. After removing the IE7 compatibility mode, the page finally rendered properly in WP8 devices and IE10 snap-mode.
+
+There's another solution to your dilemma if you are working with IE7 and IE8 rendering mode. First, if you are using any HTML5 tags be sure to include the html5shiv file. This JavaScript file will help IE properly interpret HTML5 tags.
+
+Next, add the respond.js script to your site. Make sure this is included after your style sheets. Respond actually uses AJAX to request your stylesheets again and then apply them as needed. You may run into some quirky issues if using a CDN or doing local testing. [Check out the github page for more details.](https://web.archive.org/web/20190617064636/https://github.com/scottjehl/Respond)

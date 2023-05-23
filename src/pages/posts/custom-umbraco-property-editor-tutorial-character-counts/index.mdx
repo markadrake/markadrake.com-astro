@@ -2,8 +2,10 @@
 layout: "./../../../layouts/Post.astro"
 title: "Custom Umbraco Property Editor Tutorial: Character Counts"
 published: "2015-01-22"
-tags: ["Umbraco 7"]
+tags: [ "Umbraco 7" ]
 ---
+
+import Gist from "./../../../components/Gist.astro";
 
 <img src="/assets/count.a7dd8036.gif" alt="Add character counts to Umbraco Text Fields"/>
 
@@ -20,6 +22,7 @@ You can skip all of this and <a href="https://github.com/markusdrake/Textbox-wit
 Where I feel Umbraco falls short is in the experience for the content author. When a regex is entered for validation there is barely any feedback given to the user why what they have entered is wrong. And the validation is re-active instead of pro-active. It only updates after the user has entered in bad data. The solution: <span style="color: #ff6600;">a custom data type</span> that provides immediate feedback to the content author! And it will be configured to use the property editor we are making today.
 
 ## So let’s create our custom property editor.
+
 Under the ”**App_Plugins**” folder create a new folder to house our new files. I created a folder called ”**TextboxWithCharacterCount**”. I find it easier to reuse the name for the folder, files, controllers, etc *but it doesn’t matter what you call them!*
 
 You’ll need to create 3 files in the folder you just created:
@@ -41,10 +44,7 @@ The package manifest will be the first file you create. This file describes our 
 
 Here is our package manifest:
 
-<a href="https://gist.github.com/markadrake/ab2ab70b39aac1be53baf748991e2d85/raw/910f84360f40b16167ea4f21cafbe0fe877f0f71/package.manifest" style="float:right">view raw</a>
-<a href="https://gist.github.com/markadrake/ab2ab70b39aac1be53baf748991e2d85#file-package-manifest">
-	package.manifest
-</a>
+<Gist id="ab2ab70b39aac1be53baf748991e2d85" file="package.manifest" />
 
 ### The HTML Template &amp; The Angular Controller
 
@@ -57,13 +57,11 @@ Again, looking at ”<a href="http://umbraco.github.io/Belle/#/tutorials/Creatin
 
 Here is our HTML File:
 
-<a href="https://gist.github.com/markadrake/ab2ab70b39aac1be53baf748991e2d85/raw/910f84360f40b16167ea4f21cafbe0fe877f0f71/TextboxWithCharacterCount.html" style="float:right">view raw</a>
-<a href="https://gist.github.com/markadrake/ab2ab70b39aac1be53baf748991e2d85#file-textboxwithcharactercount-html">TextboxWithCharacterCount.html</a>
+<Gist id="ab2ab70b39aac1be53baf748991e2d85" file="TextboxWithCharacterCount.html" />
 
 And here is our Angular Controller:
 
-<a href="https://gist.github.com/markadrake/ab2ab70b39aac1be53baf748991e2d85/raw/910f84360f40b16167ea4f21cafbe0fe877f0f71/TextboxWithCharacterCount.controller.js" style="float:right">view raw</a>
-<a href="https://gist.github.com/markadrake/ab2ab70b39aac1be53baf748991e2d85#file-textboxwithcharactercount-controller-js"></a>
+<Gist id="ab2ab70b39aac1be53baf748991e2d85" file="TextboxWithCharacterCount.controller.js" />
 
 ## Now we can put it to use!
 Your file structure should look something like this:

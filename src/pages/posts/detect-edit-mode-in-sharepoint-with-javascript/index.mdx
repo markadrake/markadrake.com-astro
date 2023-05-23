@@ -1,18 +1,9 @@
 ---
-layout: "./../../../layouts/Layout.astro"
+layout: "./../../../layouts/Post.astro"
 title: "Detect Edit Mode in SharePoint with JavaScript"
-published: "2013-08-19"
-tags: []
+published: "2013-08-29"
+tags: [ "SharePoint 2007", "SharePoint 2010", "SharePoint 2013" ]
 ---
-
-# Detect Edit Mode in SharePoint with JavaScript
-
-<time datetime={frontmatter.published}>
-**Published:**
-August 18th, 2013
-</time>
-
-- SharePoint 2007- SharePoint 2010- SharePoint 2013	
 
 When writing custom JavaScript code, especially creating UI elements like tabs, accordions, image carousels and slideshows – you may end up doing things to the DOM that make it hard (or impossible) to edit areas of the page or manage the settings for a particular web part.
 
@@ -22,19 +13,27 @@ In cases like these it’s good to setup a bool variable and test whether you ar
 
 The following call will return true if you are in edit mode, or false if you are in view mode:
 
-```Code```
+```
+var InEditMode = SP.Ribbon.PageState.Handlers.isInEditMode();
+```
 
 ## SharePoint 2007
 
 Since ‘SP’ doesn’t exist we’ll need to use a little more JavaScript to detect whether the page is in edit mode or not. Here is a method that will work for SharePoint 2007 in the same way. This call will return true if you are in edit mode, or false if you are in view mode.
 
-```Code```
+```
+var InEditMode = (document.getElementById('MSOLayout_InDesignMode').value == 1) ? true : false;
+```
 
 In case you are worried about upgrading or moving your JavaScript files from 2007 to a newer version like 2010 or 2013 don’t worry, this method works in all 3!
 
 ## Next Steps
 Before your UI calls or UI functions – perform a quick logic test. If the value of InEditMode is false, proceed with the rest of the script:
 
-```Code```
+```
+if(!InEditMode){
+	...
+}
+```
 
 Next time you go to edit the page, you’re web parts and web part zones won’t be affected by the DOM manipulation you do through JavaScript. You could even use this technique to add a class name to the &lt;html&gt; or &lt;body&gt; tag to circumvent issues from CSS.

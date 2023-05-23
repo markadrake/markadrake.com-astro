@@ -1,0 +1,55 @@
+---
+// Find all posts
+const allPosts = await Astro.glob("./../pages/posts/**/*.mdx")
+
+// Sort the posts by published data
+allPosts.sort((a, b) => 
+	b.frontmatter.published.localeCompare(a.frontmatter.published)
+);
+
+// Organize by calendar year
+let postsByYear = {};
+allPosts.map(post => {
+	const year = post.frontmatter.published.substr(0, 4);
+	if(postsByYear[year]) {
+		postsByYear[year].push(post);
+	} else {
+		postsByYear[year] = [post];
+	}
+});
+---
+
+{Object.keys(postsByYear).sort((a, b) => b - a).map((key) => 
+
+	<div class="calendar-year">
+
+		<p class="heading">{key}</p>
+
+		<div>
+			{postsByYear[key].map((post) =>
+				<p>
+					<a href={post.url}>
+						{post.frontmatter.title}
+					</a>
+					{post.frontmatter.published}
+				</p>
+			)}
+		</div>
+	</div>
+
+)}
+
+<style lang="scss">
+	.calendar-year {
+		display: flex;
+		align-items: flex-start;
+		border-top: 1px solid var(--borders);
+		padding: 1rem 0;
+
+		> p {
+			margin-right: 2rem;
+			position: sticky;
+			top: 0;
+		}
+	}
+</style>

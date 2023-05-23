@@ -1,11 +1,15 @@
 ---
 export interface Props {
-	key: string;
+	id: string;
+	file?: string;
 }
 
-const { key } = Astro.props;
+const { id, file } = Astro.props;
 
-const src = `https://gist.github.com/markadrake/${key}.js`;
+let src = `https://gist.github.com/markadrake/${id}.js`;
+if(file) {
+	src += `?file=${file}`;
+}
 ---
 
 <script src={src}></script>

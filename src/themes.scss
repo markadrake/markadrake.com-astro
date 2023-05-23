@@ -10,6 +10,9 @@
 	--social-youtube: #FF0000;
 	--social-rumble: #95c455;
 	--social-instagram: #E4405F;
+	--foreground-link: rgb(111, 95, 255);
+	--foreground-link-visited: rgb(111, 95, 255);
+	--borders: rgba(0, 0, 0, 0.16);
 }
 
 /*
@@ -20,5 +23,7 @@
 		--background: #222;
 		--foreground: #fff;
 		--foreground-link: rgb(95, 212, 255);
+		--foreground-link-visited: rgb(95, 212, 255);
+		--borders: rgba(255, 255, 255, 0.32);
 	}
 }

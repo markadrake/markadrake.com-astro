@@ -1,18 +1,9 @@
 ---
-layout: "./../../../layouts/Layout.astro"
+layout: "./../../../layouts/Post.astro"
 title: "Public SharePoint Sites and IE8 Compatibility"
 published: "2013-11-21"
-tags: []
+tags: [ "SharePoint 2010" ]
 ---
-
-# Public SharePoint Sites and IE8 Compatibility
-
-<time datetime={frontmatter.published}>
-**Published:**
-November 20th, 2013
-</time>
-
-- SharePoint 2010	
 
 <a href="http://get-spblog.com/2012/05/23/html5-sp2010/">Removing the X-UA-Compatible tag from a SharePoint 2010 can have a lot of nuisances</a>. This tag is there to force newer versions of IE to render the site in IE8 mode to avoid issues with new standards or updates mainly to the JS engine. But at the same time, it forces newer versions of Internet Explorer – that already support media queries and html5 elements, to render in IE8 mode and require the use of polyfills to implement the responsive design. This requires additional resources (polyfills) to be requested, downloaded, rendered, and executed – to implement something that is otherwise supported natively by the browser.
 
@@ -22,7 +13,15 @@ I prefer to let IE9+ do their thing, since they already recognize our common pol
 
 There are ways around this of course – one is to create two master pages and keep the X-UA-Compatible tag on the system master page. But this adds additional overhead to the project and forces you to maintain code changes to 2 master pages. Instead we can use a Security Trimmed Control to test whether there is even a need for this tag, else hiding it from the browser:
 
-```Code```
+```
+<head runat="server">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Expires" content="0" />
+	<Sharepoint:SPSecurityTrimmedControl runat="server" Permissions="AddAndCustomizePages">
+		<meta http-equiv="X-UA-Compatible" content="IE=8"/>
+	</SharePoint:SPSecurityTrimmedControl>
+	...
+```
 
 Note the **Permissions** attribute above. We use it here to check if the current user has the ability to customize pages, and if he or she does, the X-UA-Compatible tag is output to prevent the nuisances explained above. If the test comes back false, we know it’s a visitor who isn’t going to require the same level of compatibility with IE8. So we hide it in this case, and let the browser render in the most recent version.
 
@@ -37,6 +36,7 @@ Note the **Permissions** attribute above. We use it here to check if the current
 1. SharePoint Design Mode functionality is unscathed by the change.
 
 ## More About the SPSecurityTrimmedControl
+
 There are other attributes as well – **PermissionsString** and **AuthenticationRestrictions**. Between these two you have a wide range of control over when something should be displayed. These links will open in a new window:
 
 1. <a href="http://msdn.microsoft.com/en-us/library/microsoft.sharepoint.webcontrols.spsecuritytrimmedcontrol_members(v=office.14).aspx">Reference for SPSecuirtyTrimmedControl</a>

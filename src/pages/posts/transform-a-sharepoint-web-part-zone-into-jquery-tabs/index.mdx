@@ -1,15 +1,254 @@
 ---
-layout: "./../../../layouts/Layout.astro"
+layout: "./../../../layouts/Post.astro"
 title: "Transform a SharePoint Web Part Zone into jQuery Tabs"
-published: "2000-01-01"
-tags: []
+published: "2014-03-03"
+tags: [ "SharePoint 2010", "jQuery" ]
 ---
 
-#  Transform a SharePoint Web Part Zone into jQuery Tabs
+I've developed a sandbox web part for SharePoint 2010 that will quickly transform any web part zone into jQuery UI Tabs. What makes this web part unique is the ability to quickly customize some of the parameters of the Tabs Widget, 5 of 7 which are made available through the web part properties panel:
 
-<time datetime={frontmatter.published}>
-**Published:**
-December 31st, 1999
-</time>
+active
+collapsible
+disabled
+event
+heightStyle
+Overview of the Code
+The web part is simplistic. We add a few custom web part properties that can be edited, and use them to output some data on to the page. The real coding is in the JavaScript where I restructure the data and then create the Tabs Widget.
 
-- SharePoint 2010	
+Web Part
+
+```
+using System;
+using System.ComponentModel;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
+using Microsoft.SharePoint;
+using Microsoft.SharePoint.WebControls;
+ 
+namespace jQuery_UI_Tab_Zone.jQuery_UI_Tab_Zone
+{
+	[ToolboxItemAttribute(false)]
+	public class jQuery_UI_Tab_Zone : WebPart
+	{
+ 
+		#region custom web part properties
+		[WebBrowsable(true),
+		Category("JQuery Options"),
+		Personalizable(PersonalizationScope.Shared),
+		WebDisplayName("Include jQuery"),
+		WebDescription("Check to include reference to jQuery. * Google CDN")]
+		public bool includejQuery { get; set; }
+ 
+		[WebBrowsable(true),
+		Category("JQuery Options"),
+		Personalizable(PersonalizationScope.Shared),
+		WebDisplayName("Include jQuery UI"),
+		WebDescription("Check to include reference to jQuery UI. * Google CDN")]
+		public bool includejQueryUI { get; set; }
+ 
+		[WebBrowsable(true),
+		Category("JQuery Options"),
+		Personalizable(PersonalizationScope.Shared),
+		WebDisplayName("Include jQuery UI CSS"),
+		WebDescription("Check to include reference to jQuery UI CSS. * Google CDN")]
+		public bool includejQueryUICSS { get; set; }
+ 
+		[WebBrowsable(true),
+		Category("JQuery Options"),
+		Personalizable(PersonalizationScope.Shared),
+		WebDisplayName("Include SPTabs Script"),
+		WebDescription("Check to include the custom sptabs() jQuery function.")]
+		public bool includeTabifyScript { get; set; }
+ 
+		[WebBrowsable(true),
+		Category("JQuery Tabs() Properties"),
+		Personalizable(PersonalizationScope.Shared),
+		WebDisplayName("Width (px)"),
+		WebDescription("If set a min and max width will be applied to the tab container. (integer)"),
+		DefaultValue(0)]
+		public int dataWidth { get; set; }
+ 
+		[WebBrowsable(true),
+		Category("JQuery Tabs() Properties"),
+		Personalizable(PersonalizationScope.Shared),
+		WebDisplayName("Active"),
+		WebDescription("Which panel should be open? (integer)"),
+		DefaultValue(0)]
+		public int dataActive { get; set; }
+ 
+		[WebBrowsable(true),
+		Category("JQuery Tabs() Properties"),
+		Personalizable(PersonalizationScope.Shared),
+		WebDisplayName("Collapsible"),
+		WebDescription("When set to true, the active panel can be closed.")]
+		public bool dataCollapsible { get; set; }
+ 
+		[WebBrowsable(true),
+		Category("JQuery Tabs() Properties"),
+		Personalizable(PersonalizationScope.Shared),
+		WebDisplayName("Disabled"),
+		WebDescription("Which tabs should be disabled? (integer seperated by commas)")]
+		public string dataDisabled { get; set; }
+ 
+		[WebBrowsable(true),
+		Category("JQuery Tabs() Properties"),
+		Personalizable(PersonalizationScope.Shared),
+		WebDisplayName("Event"),
+		WebDescription("The type of event that the tabs should react to in order to activate the tab. (event in quotations and comma seperated)")]
+		public string dataEvent { get; set; }
+ 
+		public enum dataHeightStyleOptions { auto, fill, content }
+		[WebBrowsable(true),
+		Category("JQuery Tabs() Properties"),
+		Personalizable(PersonalizationScope.Shared),
+		WebDisplayName("Height Style"),
+		WebDescription("Controls the heigh of the tabs widget and each panel.")]
+		public dataHeightStyleOptions dataHeightStyle { get; set; }
+		#endregion
+ 
+		protected override void Render(HtmlTextWriter writer)
+		{
+ 
+			if (includejQuery)
+			{
+				writer.WriteLine("<script src=\\"//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js\\"></script>");
+			}
+			if (includejQueryUI)
+			{
+				writer.WriteLine("<script src=\\"//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js\\"></script>");
+			}
+			if (includejQueryUICSS)
+			{
+				writer.WriteLine("<script language=\\"javascript\\">$('head').append('<link rel=\\"stylesheet\\" href=\\"//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css\\" />');</script>");
+			}
+			if (includeTabifyScript)
+			{
+				writer.WriteLine("<script language=\\"javascript\\">$(document).ready(function(){if((document.getElementById(\\"MSOLayout_InDesignMode\\").value==1)?false:true){$(\\".sptabs\\").sptabs()}});(function(a){a.fn.sptabs=function(){var f=a(this).data();var c={active:(f.active)?f.active:0,collapsible:(f.collapsible==1)?true:false,disabled:(f.disabled)?f.disabled:false,heightStyle:(f.heightstyle)?f.heightstyle:\\"auto\\",event:(f.event)?f.event:\\"click\\"};var g=a(this).parents(\\"table\\").eq(1);var e=a('<div id=\\"tabs\\" class=\\"tabs\\">');if(f.width>0){e.width(f.width)}var d=a(\\"<ul>\\");var b=a(\\"\\");a(this).parents(\\"tr\\").eq(1).remove();g.find(\\".s4-wpTopTable\\").each(function(j){var h=a(this).find(\\" > tbody > tr > td\\");d.append('<li><a href=\\"#tabs-'+(j+1)+'\\">'+a(h[0]).find(\\".ms-WPTitle\\").text().trim()+\\"</a></li>\\");b=b.add('<div id=\\"tabs-'+(j+1)+'\\">'+a(h[1]).html()+\\"</div>\\")});e.append(d);e.append(b);g.before(e);g.hide();e.tabs(c);return this}})(jQuery);</script>");
+			}
+ 
+			writer.WriteBeginTag("div");
+			writer.WriteAttribute("class", "sptabs");
+ 
+			// build custom jquery tabs() options
+			if (!isEmptyorNull(Convert.ToString(dataWidth.ToString())))
+			{
+				writer.WriteAttribute("data-width", dataWidth.ToString());
+			}
+			if (!isEmptyorNull(Convert.ToString(dataActive)))
+			{
+				writer.WriteAttribute("data-active", dataActive.ToString());
+			}
+			if (!isEmptyorNull(Convert.ToString(dataCollapsible)))
+			{
+				writer.WriteAttribute("data-collapsible", Convert.ToString(dataCollapsible).ToLower());
+			}
+			if (!isEmptyorNull(dataDisabled))
+			{
+				writer.WriteAttribute("data-disabled", dataDisabled);
+			}
+			if (!isEmptyorNull(dataEvent))
+			{
+				writer.WriteAttribute("data-event", dataEvent);
+			}
+			if (!isEmptyorNull(Convert.ToString(dataHeightStyle)))
+			{
+				writer.WriteAttribute("data-heightstyle", dataHeightStyle.ToString());
+			}
+ 
+			writer.Write(HtmlTextWriter.TagRightChar);
+			writer.WriteEndTag("div");
+ 
+			writer.WriteLine("<p>Use the web part properties menu to configure options for <a href=\\"http://api.jqueryui.com/tabs/\\" target=\\"_blank\\">jQuery UI Tabs</a>.</p>");
+ 
+			base.Render(writer);
+ 
+		}
+ 
+		public bool isEmptyorNull(string value)
+		{
+			if (string.IsNullOrEmpty(value) || value == "0")
+			{
+				return true;
+			}
+			return false;
+		}
+ 
+	}
+}
+```
+
+JavaScript (jQuery)
+Note that the web part itself includes this code in it's minifed form (line 101).
+
+```
+$(document).ready(function (){
+	if((document.getElementById('MSOLayout_InDesignMode').value == 1) ? false : true)
+	{
+		$('.sptabs').sptabs();
+	}
+});
+ 
+(function($){
+	$.fn.sptabs = function () {
+ 
+		/* read-in data from web part */
+		var data = $(this).data(); 
+		var options = {
+			active: (data.active)? data.active : 0,
+			collapsible: (data.collapsible == 1)? true : false,
+			disabled: (data.disabled) ? data.disabled : false,
+			heightStyle: (data.heightstyle) ? data.heightstyle : 'auto',
+			event: (data.event) ? data.event : 'click'
+		}
+ 
+		/* web part zone */
+		var webpartzone = $(this).parents('table').eq(1);
+ 
+		/* create tab structure */
+		var tabelement = $('<div id="tabs" class="tabs">');
+		if(data.width > 0) {
+			tabelement.width(data.width);
+		}
+		var tabs = $('<ul>');
+		var panels = $('');
+ 
+		/* remove old content */
+		$(this).parents('tr').eq(1).remove();
+ 
+		/* create tabs and panels */
+		webpartzone.find('.s4-wpTopTable').each(function(i){
+ 
+			var tdelements = $(this).find(' > tbody > tr > td');
+			tabs.append('<li><a href="#tabs-'+(i+1)+'">'+$(tdelements[0]).find('.ms-WPTitle').text().trim()+'</a></li>');
+			panels = panels.add('<div id="tabs-' + (i+1) + '">' + $(tdelements[1]).html() + '</div>');
+ 
+		});
+ 
+		/* add to DOM */
+		tabelement.append(tabs)
+		tabelement.append(panels);
+		webpartzone.before(tabelement);
+ 
+		/* hide old content */
+		webpartzone.hide();
+ 
+		/* create tabs */
+		tabelement.tabs(options);
+ 
+		return this;
+	};
+})(jQuery);
+```
+
+Download the Web Part
+Want to use it in your own environment?
+
+You'll need the uploadable WSP file.
+Want to make changes or explore the code?
+
+ You'll need the Visual Studio Project.
+Add to the Gallery, Use in Your Page, All Done!
+
+http://www.youtube.com/watch?v=fd8XMIb6Lwc

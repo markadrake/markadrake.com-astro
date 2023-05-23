@@ -1,18 +1,21 @@
 ---
 import Layout from "./Layout.astro";
+import moment from "moment";
 const { frontmatter } = Astro.props;
+const publishedDate = new Date(frontmatter.published);
+const publishedDateFormatted = moment(publishedDate).format("MMMM Do, YYYY");
 ---
 
 <Layout title="Post Title">
 	<article>
 		<h1 class="heading">{frontmatter.title}</h1>
 
-		<time datetime={frontmatter.published}>
+		<time datetime={publishedDate.toISOString()}>
 			<strong>Published:</strong>
-			January 21st, 2015
+			{publishedDateFormatted}
 		</time>
 
-		<ul>
+		<ul class="tags">
 			{frontmatter.tags.map(tag => 
 				<li>{tag}</li>
 			)}
@@ -22,3 +25,30 @@ const { frontmatter } = Astro.props;
 
 	</article>
 </Layout>
+
+<style lang="scss">
+	article {
+		max-width: 66ch;
+		margin: auto;
+	}
+
+	.tags {
+		display: flex;
+		justify-content: flex-end;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+
+		li {
+			display: inline-block;
+			margin: 0;
+			padding: 0.25rem 0.5rem;
+			border: 1px solid;
+			border-radius: 0.25rem;
+
+			+ li {
+				margin-left: 0.5rem;
+			}
+		}
+	}
+</style>

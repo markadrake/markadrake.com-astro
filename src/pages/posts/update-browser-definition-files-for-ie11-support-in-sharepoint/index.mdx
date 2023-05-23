@@ -1,15 +1,57 @@
 ---
-layout: "./../../../layouts/Layout.astro"
+layout: "./../../../layouts/Post.astro"
 title: "Update Browser Definition Files for IE11 Support in SharePoint"
-published: "2000-01-01"
-tags: []
+published: "2014-03-20"
+tags: [ "SharePoint 2010" ]
 ---
 
-# 
+Are you using SharePoint for your intranet site and you recently upgraded people to IE11? Or maybe you are using it to host your public website and are concerned about supporting IE11? If so then you have certainly noticed some issues with either SharePoint 2010 or 2013. The compatibility issues I've experienced are:
 
-<time datetime={frontmatter.published}>
-**Published:**
-December 31st, 1999
-</time>
+- (2010) Starting a workflow crashes the page (fix)
+- (2013) Unresponsive Ribbon
+- (2013) Calendar rendering and add link button is missing (fixed by IE team)
+- (2013) Web Part Zones do not display when in edit mode
+- (2013) Web Part Properties cannot be modified
+- (2013) Various issues with Office Web Apps
 
-- SharePoint 2010	
+Originally I approached this issue by writing JavaScript - and for SharePoint 2010 it worked. But there were too many inconsistencies in SharePoint 2013 for me to resolve. And then I noticed that the same issues I was having with one of my clients (on premise hosting) didn't exist for another client (Office 365). I scoured the internet for hotfixes that may be related to IE11 and landed on a blog article by Steve Lattina stating the issues were resolved by updating .NET's browser definition files.
+
+## Browser Definition Updates Will Fix Your Problems <br /> *... Install Them Now*
+
+Though I'm a big stickler for feature detection over browser detection, Microsoft is not. Browser detection is heavily ingrained into the SharePoint platform. You'll notice changes in the HTML served to IE11 versus IE10 for example - changes with HTML as well as references to CSS and JS files. So what we need to do is update those browser definition files, which are actually part of .NET.
+
+Hotfix for .NET versions 2.0 and 3.5
+
+Hotfix for .NET version 4.0
+
+Additional Hotfixes That Should Help
+Update (April 17th, 2014): Per some advice from Scott Hunter, please see if any of the applicable hotfixes apply to your environment:
+
+http://support.microsoft.com/kb/2836939 - NDP 4 - Win7SP1/Win2K3SP2/Win2K8R2SP1/Win2K8SP2/VistaSP2/WinXPSP3
+
+http://support.microsoft.com/kb/2836940 - NDP 3.5 SP1 - Win2K3SP2/Win2K8SP2/VistaSP2/WinXPSP3
+
+http://support.microsoft.com/kb/2836941 - NDP 2.0 SP2 - Win2K3SP2/WinXPSP3
+
+http://support.microsoft.com/kb/2836942 - NDP 3.5 SP1 - Win7SP1/Win2K8R2SP1
+
+http://support.microsoft.com/kb/2836943 - NDP 2.0 SP2 - Win7SP1/Win2K8R2SP1
+
+http://support.microsoft.com/kb/2836945 - NDP 2.0 SP2 - Win2K8SP2/VistaSP2
+
+http://support.microsoft.com/kb/2836946 - NDP 2.0 SP2 - Win8RTM/WinRTRTM/Win2K12RTM
+
+## Cumulative Updates Are Important <br /> *... Install Them Eventually*
+
+If you are still having issues with specific functionality I encourage you to install the cumulative updates for SharePoint server. There's no need to t/s issues that may no longer exist. More recently, there have been some cumulative updates SharePoint 2013 resolving some key issues people have experienced in IE11. I'm also a stickler for keeping software updated at all times. The most secure code is code that hasn't been released yet. So always keep your software updated.
+
+I also recommend testing updates before pushing to a production environment.
+
+SharePoint 2013 list of cumulative updates
+
+SharePoint 2010 list of cumulative updates
+
+After Patching
+Are you running into any more issues after patching your browser definition files and using IE11 with SharePoint 2010 or 2013? Comment below and if they are UI/UX related I will help the best I can. I encourage everyone to participate in the Technet Forums for SharePoint, where you can find even more assistance from experts in server administration and custom development.
+
+I would like to thank Steve Lattina at Fpweb.net who wrote an article pinning the recent compatibility issues with IE11 were due to outdated browser definition files. He originally posted information regarding the hotfixes on December 11th, 2013.

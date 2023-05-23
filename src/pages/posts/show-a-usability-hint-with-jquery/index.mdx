@@ -1,15 +1,103 @@
 ---
-layout: "./../../../layouts/Layout.astro"
+layout: "./../../../layouts/Post.astro"
 title: "Show a Usability Hint with jQuery"
-published: "2000-01-01"
-tags: []
+published: "2014-03-06"
+tags: [ "jQuery" ]
 ---
 
-# Show a Usability Hint with jQuery
+## Reveal Areas the Visitor Can Swipe
 
-<time datetime={frontmatter.published}>
-**Published:**
-December 31st, 1999
-</time>
+If your visitor is not familiar with your site they may not know how your web site works. Let's take into account a mobile site for this example. If your slideshow's timing is overly generous they may never see your slideshow actually transition. Or perhaps you have a list of articles at the bottom of your website that can be swiped to reveal more articles. Unless they are familiar with your site, or they give it a try, how are they to know swiping will reveal more content?
 
-- SharePoint 2010	
+I'll show you how easy it is to give the visitor a hint to what he or she can do. You can choose to do this either (a) on page load or (b) when the element comes into view. For the remainder of this article, I'll be showing you how to do this when an element comes into view.
+
+Create a Graphic
+
+So we'll start by creating an image that represents the feature and what we intend the user to do. An image like this works great for swiping (download transparent PNG):
+
+Determine your HTML & CSS
+
+Now determine what your HTML structure will be for the overlay. I've gone with this (make sure you update your img path):
+
+```
+<div class="tip swipe">
+	<img src="/path/to/ux-hint-swipe.png"/>
+</div>
+```
+
+Apply some CSS. Remember that the image has a transparent background, so we'll need to add some styling to it as well. Here is some sample CSS to get you started:
+
+```
+.swipeable {
+	position:relative;
+}
+.tip.swipe {
+	position: absolute;
+	height: 50%;
+	width: 50%;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	margin: auto;
+	text-align: center;
+	pointer-events: none;
+	display: none;
+}
+.tip.swipe img {
+	max-height: 100%;
+	max-width: 100%;
+	background-color: rgba(0,0,0,0.8);
+	border-radius: 10px;
+	padding: 10px 20px;
+	box-sizing:border-box;
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	margin: auto;
+}
+```
+
+Adding a Dash of jQuery
+And finally we'll write a bit of JavaScript (jQuery) to handle the following:
+
+Append our HTML to elements we want to display the hint on.
+Note that this element should have a position: relative;
+Animate our DIV element.
+We will use jQuery's fadeIn() method, followed by a delay(), and we'll end everything with a fadeOut().
+Now we are at a branching point. I suggested above you can either perform these actions on page load or when an element scrolls into view. Because the later is more difficult, I'll cover showing the animation when the element scrolls into view. Because jQuery doesn't have an OOTB method to handle this, we will rely on a plugin, jQuery inview, to tell us whether or not the element is in the view container.
+
+So for our slideshow container, or any element where we've enabled swiping we first have to identify it. Let's assume all of these elements share a class name like swipeable. We can use this as a selector in our jQuery script.
+
+```
+function displaySwipeTip(){
+ 
+	var e = $('<div class="tip swipe"><img src="ux-hint-swipe.png"/></div>');
+ 
+	var f = $('.swipeable');
+ 
+	f.each(function(){
+		$(this).append(e.clone());
+	});
+ 
+	f.on('inview', function(e, isVisible){
+		// more info: https://github.com/protonet/jquery.inview
+		if(isVisible){
+			$(this).unbind('inview').find('.tip.swipe').delay(1000).fadeIn(850).delay(2100).fadeOut(850);
+		}
+	});
+}
+```
+
+Then all we need to do is call our function displaySwipeTip() on page load. If you are using jQuery, you more than likely have a DOM ready event where you put your function calls:
+
+```
+$(document).ready(function(){
+
+	// your existing code... 
+	displaySwipeTip();
+ 
+});
+```

@@ -1,48 +1,13 @@
 ---
 import { a } from '../../.netlify/functions-internal/chunks/astro.47581b98.mjs';
 import Layout from '../layouts/Layout.astro';
-
-// Find all posts
-const allPosts = await Astro.glob("./posts/**/*.mdx")
-
-// Sort the posts by published data
-allPosts.sort((a, b) => 
-	b.frontmatter.published.localeCompare(a.frontmatter.published)
-);
-
-// Organize by calendar year
-let postsByYear = {};
-allPosts.map(post => {
-	const year = post.frontmatter.published.substr(0, 4);
-	if(postsByYear[year]) {
-		postsByYear[year].push(post);
-	} else {
-		postsByYear[year] = [post];
-	}
-});
+import Posts from '../components/Posts.astro';
 ---
 
 <Layout 
 title="Welcome to Astro." 
 breadcrumbs={false}>
 
-	{Object.keys(postsByYear).sort((a, b) => b - a).map((key) => 
-
-		<div>
-			<p>{key}</p>
-
-			{postsByYear[key].map((post) =>
-
-				<div>
-					<p>
-						<a href={post.url}>
-							{post.frontmatter.title}
-						</a>
-						{post.frontmatter.published}
-					</p>
-				</div>
-			)}
-		</div>
-
-	)}
+	<Posts />
+	
 </Layout>

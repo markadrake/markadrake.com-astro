@@ -25,18 +25,20 @@ allPosts.map(post => {
 
 	<div class="calendar-year">
 
-		<p class="heading">{key}</p>
+		<p class="billboard">{key}</p>
 
-		<div>
+		<ul>
 			{postsByYear[key].map((post) =>
-				<p>
-					<a class="subheading" href={post.url}>
-						{post.frontmatter.title}
+				<li>
+					<a href={post.url}>
+						<span class="subheading">
+							{post.frontmatter.title}
+						</span>
+						<time datetime={new Date(post.frontmatter.published).toISOString()}>
+							{moment(new Date(post.frontmatter.published)).format("MMMM Do, YYYY")}
+						</time>
 					</a>
-					<time datetime={new Date(post.frontmatter.published).toISOString()}>
-						{moment(new Date(post.frontmatter.published)).format("MMMM Do, YYYY")}
-					</time>
-				</p>
+				</li>
 			)}
 		</div>
 	</div>
@@ -47,18 +49,50 @@ allPosts.map(post => {
 	.calendar-year {
 		display: flex;
 		align-items: flex-start;
-		border-top: 1px solid var(--borders);
-		padding: 1rem 0;
+		border-top: 3px solid var(--borders);
+		padding: 2rem 0;
+	}
 
-		> p {
-			margin-right: 2rem;
-			position: sticky;
-			top: 0;
+	.billboard {
+		color: var(--borders);
+		margin-right: 2rem;
+		position: sticky;
+		top: 0;
+	}
+
+	ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+
+		li {
+			margin-bottom: 2rem;
 		}
 	}
 
 	a {
+		position: relative;
 		display: block;		
+		outline: none;
+
+		time {
+			color: var(--foreground);
+		}
+
+		&:before {
+			content: "";
+			position: absolute;
+			inset: -1rem;
+			border: 3px dashed;
+			opacity: 0;
+		}
+
+		&:focus,
+		&:hover {
+			&:before {
+				opacity: 1;
+			}
+		}
 	}
 
 	time {

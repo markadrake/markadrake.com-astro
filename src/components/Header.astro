@@ -71,9 +71,14 @@ header {
 .logo {
 
 	> a {
-		color: inherit;
+		color: var(--foregroundnpm );
 		text-decoration: none;
 		display: flex;
+
+		&:visited {
+			color: var(--foregroundnpm );
+		}
+
 		p {
 			margin: 0;
 			display: flex;
@@ -82,6 +87,7 @@ header {
 			font-weight: 700;
 		}
 	}
+
 	svg {
 		display: block;
 		height: 80px;
@@ -142,6 +148,17 @@ aside {
 		}	
 
 		a {
+			> svg {
+				color: var(--foreground);
+			}
+
+			&:hover,
+			&:focus {
+				> svg {
+					color: unset;
+				}
+			}
+
 		}
 	}
 }

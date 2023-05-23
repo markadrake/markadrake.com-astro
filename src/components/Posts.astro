@@ -34,8 +34,8 @@ allPosts.map(post => {
 						<span class="subheading">
 							{post.frontmatter.title}
 						</span>
-						<time datetime={new Date(post.frontmatter.published).toISOString()}>
-							{moment(new Date(post.frontmatter.published)).format("MMMM Do, YYYY")}
+						<time datetime={new Date(post.frontmatter.published).toUTCString()}>
+							{moment(new Date(post.frontmatter.published)).utc().format("MMMM Do, YYYY")}
 						</time>
 					</a>
 				</li>
@@ -46,16 +46,13 @@ allPosts.map(post => {
 )}
 
 <style lang="scss">
+
 	.calendar-year {
-		display: flex;
-		align-items: flex-start;
 		border-top: 3px solid var(--borders);
-		padding: 2rem 0;
 	}
 
 	.billboard {
 		color: var(--borders);
-		margin-right: 2rem;
 		position: sticky;
 		top: 0;
 	}
@@ -98,5 +95,31 @@ allPosts.map(post => {
 	time {
 		display: block;
 		// color: var(--borders);
+	}
+
+	/* Larger screens only */
+	@media screen and (min-width: 60rem) {
+		.calendar-year {
+			padding: 2rem 0;
+			display: flex;
+			align-items: flex-start;
+		}
+
+		.billboard {
+			margin-right: 2rem;
+		}
+
+	}
+
+	/* Smaller screens only */
+	@media screen and (max-width: 59.99999rem) {
+		.calendar-year {
+			padding: 1rem 0;
+			position: relative;
+		}
+
+		.billboard {
+			text-align: right;
+		}
 	}
 </style>

@@ -2,15 +2,15 @@
 import Layout from "./Layout.astro";
 import moment from "moment";
 const { frontmatter } = Astro.props;
-const publishedDate = new Date(frontmatter.published);
-const publishedDateFormatted = moment(publishedDate).format("MMMM Do, YYYY");
+const publishedDate = new Date(frontmatter.published).toUTCString();
+const publishedDateFormatted = moment(publishedDate).utc().format("MMMM Do, YYYY");
 ---
 
 <Layout title={frontmatter.title}>
 	<article>
 		<h1 class="heading">{frontmatter.title}</h1>
 
-		<time datetime={publishedDate.toISOString()}>
+		<time datetime={publishedDate}>
 			<strong>Published:</strong>
 			{publishedDateFormatted}
 		</time>

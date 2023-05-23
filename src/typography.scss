@@ -44,6 +44,10 @@ a {
 	font-weight: bold;
 	max-width: 60ch;
 	line-height: 1;
+
+	@media screen and (max-width: 59.99999rem) {
+		font-size: 3.5rem;
+	}
 }
 
 .heading {
@@ -51,6 +55,10 @@ a {
 	font-weight: bold;
 	max-width: 60ch;
 	line-height: 1.25;
+
+	@media screen and (max-width: 59.99999rem) {
+		font-size: 1.75rem;
+	}
 }
 
 .subheading {
@@ -58,4 +66,8 @@ a {
 	font-weight: bold;
 	max-width: 60ch;
 	line-height: 1.25;
+
+	@media screen and (max-width: 59.99999rem) {
+		font-size: 1.25rem;
+	}
 }

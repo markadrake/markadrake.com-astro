@@ -6,7 +6,7 @@ const publishedDate = new Date(frontmatter.published);
 const publishedDateFormatted = moment(publishedDate).format("MMMM Do, YYYY");
 ---
 
-<Layout title="Post Title">
+<Layout title={frontmatter.title}>
 	<article>
 		<h1 class="heading">{frontmatter.title}</h1>
 

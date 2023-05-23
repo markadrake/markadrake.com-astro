@@ -1,4 +1,6 @@
 ---
+import moment from "moment";
+
 // Find all posts
 const allPosts = await Astro.glob("./../pages/posts/**/*.mdx")
 
@@ -28,10 +30,12 @@ allPosts.map(post => {
 		<div>
 			{postsByYear[key].map((post) =>
 				<p>
-					<a href={post.url}>
+					<a class="subheading" href={post.url}>
 						{post.frontmatter.title}
 					</a>
-					{post.frontmatter.published}
+					<time datetime={new Date(post.frontmatter.published).toISOString()}>
+						{moment(new Date(post.frontmatter.published)).format("MMMM Do, YYYY")}
+					</time>
 				</p>
 			)}
 		</div>
@@ -51,5 +55,14 @@ allPosts.map(post => {
 			position: sticky;
 			top: 0;
 		}
+	}
+
+	a {
+		display: block;		
+	}
+
+	time {
+		display: block;
+		// color: var(--borders);
 	}
 </style>

@@ -1,0 +1,42 @@
+## Why, What, and Where to Migrate
+
+- Why
+	- In July 2021 Umbraco 7 entered the security-only phase. This means that currently, Umbraco 7 will receive patches for severe security vulnerabilities.
+	- On September 30, 2023, Umbraco 7 will be End-of-Life. This means it will no longer be supported with security patches, and we no longer recommend hosting sites on this version.
+	- For more information about Umbraco 7's EOL: https://umbraco.com/umbraco-7-end-of-life/
+- What
+	- Web sites and applications the depend on Umbraco 7 must either:
+		- (a) Migrate from Umbraco 7 to the latest long-term-support (LTS) version, which is Umbraco 10.
+		- (b) Consider an extended-long-term-support (XLTS) contract with Umbraco HQ or Umbraco Gold Partnery agency, to continue patching critical security issues only.
+		- (c) Assume resposnibility for running deprecated software on the internet that may have critical security issues that put your data at risk. 
+	- Migration from Umbraco 7 to Umbraco 10 is not straight-forward. Some of the challenges ahead include:
+		- The underlying framework for Umbraco has changed. Umbraco 7 is built on the `.NET Framework`. Umbraco 10 is built on the `.NET 6` framework.
+			- First-party code including razor templates, backoffice customizations, controllers, extensions, packages, and more will all need to be refactored.
+			- Third-party code, such as Nuget packages and Umbraco packages, must be audited for what level of support is available for the new framework and new version of Umbraco. Stakeholders will need to decide on a case-by-case basis what can be safely disgarded, replaced, or refactored.
+		- The underlying API for Umbraco has gone through changes at every major release. This adds complexity to the migration process and will require additional refactoring for any first-party code. 
+- Where
+	- It is recommended to migrate from Umbraco 7 to the latest long-term-support (LTS) version, Umbraco 10.
+	- Consider the scope of your migration. A new long-term-support (LTS) version, Umbraco 13, is slated for release in December 2023.
+
+## How to Audit Your Umbraco 7 Site
+
+- Pre-migration Health Checks
+- .NET Upgrade Assistant
+	- More context: https://learn.microsoft.com/en-us/aspnet/core/migration/mvc?view=aspnetcore-6.0
+- God Mode
+	- 
+
+## How to Estimate the Effort Ahead
+
+- Use an algorithm that works for you. 
+	- Every team of developers tasked with migrating Umbraco 7 to Umbraco 10 will have different strengths and weaknesses. 
+	- Each project is typically highly tailored and unique. Estimates are very general in nature and rarely accurate. Estimate conservatively.
+- Our algorithm:
+	- We have a team that is very strong background in client-side, or frontend, development. Our estimates for client-side code are highly accurate.
+		- Razor templates, partials, and macros are refactored at a rate of ~ six per day.
+		- Controllers and API endpoints that support the razor code are refactored at this time too, at a rate of ~ three per day.
+	- We have a team that is proficient in service-side, or backend, development. Our estimates for server-side code are less accurate, so we must be more conservative.
+		- Third-party dependencies must be evaluated, and upgraded, refactored, replaced, or disregarded. There is limited estimation that can take place until a decision is made.
+		- Remaining first-party code, not related to the client-side, is evaluated with the .NET Upgrade Assistant tool.
+		- We lean towards a conservative estimate of ~ three days per feature.
+	- Don't forget the non-technical members of your project. These members will require time, if not additional effort, to validate the migration.

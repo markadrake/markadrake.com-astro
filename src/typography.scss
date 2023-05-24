@@ -61,6 +61,8 @@ a {
 	}
 }
 
+article > h2,
+article > h3,
 .subheading {
 	font-size: 1.75rem;
 	font-weight: bold;
@@ -70,4 +72,11 @@ a {
 	@media screen and (max-width: 59.99999rem) {
 		font-size: 1.25rem;
 	}
+}
+
+blockquote {
+	margin: 1.5rem 0;
+	padding: 1rem 0 0.01px 2rem;
+	border-left: 3px solid var(--borders);
+	opacity: 0.666;
 }

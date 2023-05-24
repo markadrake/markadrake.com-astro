@@ -1,18 +1,52 @@
 ---
 layout: "./../../../layouts/Post.astro"
-title: "Estimating Your Umbraco 7 Migration"
+title: "Your Guide to a Successful Umbraco 7 to 10 Migration"
 published: "2023-05-23"
 tags: [ "Umbraco 7", "Umbraco 10" ]
 ---
+
+> This article is a work in progress. Please check back for updates.
 
 <img 
 	src="/assets/vector_illustration_greek_god_atlas_carrying_computer_equi_2564c368-1f54-4193-93ea-f6b6f2a3cc7c.png" 
 	alt="Greek God Atlas carrying computer parts."
 	width="1456" height="816" />
 
-This article is a work in progress. Please check back!
+Keeping your digital operations up-to-date and secure is an essential element in the realm of website and application management. If your business relies on Umbraco 7, it's time to take action, because change is on the horizon.
 
-1. Why, What, and Where to Migrate
-1. How to Audit Your Umbraco 7 Site
-1. How to Estimate the Effort Ahead
-1. Now Throw It All Away
+## The Why, What, and Where of Migration
+
+In July 2021, Umbraco 7 moved into its twilight phase, receiving patches for only the most severe security vulnerabilities. This phase, a standard in the software world, indicates a countdown to the product's end-of-life (EOL). As of September 30, 2023, Umbraco 7 will officially reach EOL and will no longer receive even these minimal updates. For more detailed information, [visit Umbraco 7's EOL page](https://umbraco.com/umbraco-7-end-of-life/).
+
+The EOL stage presents a critical crossroads for those who are dependent on Umbraco 7 for their websites and applications. You have three paths to consider:
+
+1. Migrate from Umbraco 7 to the latest long-term-support (LTS) version, which is Umbraco 10.
+1. Secure an extended-long-term-support (XLTS) contract with Umbraco HQ or an Umbraco Gold Partner agency to continue receiving critical security patches.
+1. Choose to shoulder the responsibility (and risk) of running deprecated software with potential security issues.
+
+The journey from Umbraco 7 to 10 is not a simple switch. It involves substantial transformations due to the underlying framework shift from .NET Framework to .NET 6, necessitating the refactoring of all first-party code and an audit of third-party code. Additionally, with each major Umbraco release, the API changes, adding layers of complexity to the migration process.
+
+The recommended path is to migrate from Umbraco 7 to the latest LTS version, Umbraco 10. However, keep in mind that Umbraco 13, another LTS version, is expected to debut in December 2023. As you chart your course, consider the size and needs of your project, and how much effort you're ready to invest.
+
+## How to Audit Your Umbraco 7 Site
+
+Before embarking on your migration journey, it's crucial to evaluate your current Umbraco 7 site. Two key tools can help you with this task:
+
+1. The Pre-migration Health Checks provide a high-level assessment of your site, highlighting potential challenges and required updates.
+1. [The .NET Upgrade Assistant](https://learn.microsoft.com/en-us/aspnet/core/migration/mvc?view=aspnetcore-6.0) offers a more in-depth analysis, detailing what needs to be refactored to migrate to the .NET 6 framework.
+1. Use Umbraco's God Mode to gain a comprehensive understanding of your current Umbraco setup, including document types, templates, plugins, and more.
+
+## How to Estimate the Effort Ahead
+
+Understanding the potential workload and timeframe is crucial for any migration plan. Your estimate will depend on your team's strengths, the complexity of the project, and any unique elements your website or application may have. However, here's an insight into our algorithm:
+
+1. **Frontend Development**: Our strong client-side development team can refactor around six Razor templates, partials, and macros per day, along with roughly three controllers and API endpoints.
+1. **Backend Development**: Our server-side development team is tasked with evaluating third-party dependencies and remaining first-party code using the .NET Upgrade Assistant tool. Due to the complexity, we lean towards a conservative estimate of three days per feature.
+1. **Project Management**: Remember to factor in the time needed for non-technical team members to validate the migration.
+
+Migration is a challenge, but with careful planning, analysis, and execution, it's a surmountable one. The transition from Umbraco 7 to 10 is a journey towards better performance, security, and functionality. It's time to ride the wave of change and ensure your digital operations are future-ready.
+
+${(150 * 8).toLocaleString()}
+${(150 * 8 * 5).toLocaleString()}
+${(150 * 8 * 5 * 4).toLocaleString()}
+${(150 * 8 * 5 * 4 * 4).toLocaleString()}

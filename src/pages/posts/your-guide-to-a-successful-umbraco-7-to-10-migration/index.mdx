@@ -42,11 +42,41 @@ Understanding the potential workload and timeframe is crucial for any migration 
 
 1. **Frontend Development**: Our strong client-side development team can refactor around six Razor templates, partials, and macros per day, along with roughly three controllers and API endpoints.
 1. **Backend Development**: Our server-side development team is tasked with evaluating third-party dependencies and remaining first-party code using the .NET Upgrade Assistant tool. Due to the complexity, we lean towards a conservative estimate of three days per feature.
-1. **Project Management**: Remember to factor in the time needed for non-technical team members to validate the migration.
+1. **Project Management**: Remember to factor in the time needed for non-technical team members to help validate the migration. From the moment of inception, you should work to include these members in the project so they clearly understand the scope, and thus the parameters, for which they are responsible in testing.
 
 Migration is a challenge, but with careful planning, analysis, and execution, it's a surmountable one. The transition from Umbraco 7 to 10 is a journey towards better performance, security, and functionality. It's time to ride the wave of change and ensure your digital operations are future-ready.
 
-${(150 * 8).toLocaleString()}
-${(150 * 8 * 5).toLocaleString()}
-${(150 * 8 * 5 * 4).toLocaleString()}
-${(150 * 8 * 5 * 4 * 4).toLocaleString()}
+## Migrate First,<br />*Everything Else Comes Later*
+
+> TBD.
+
+## Real-World Scenarios, Costs, and Durations
+
+[Next Player Up](https://about.nextplayerup.com) is a digital agency and a [Umbraco Gold Partner](https://umbraco.com/partners/partnerlist/next-player-up/). We are international and currently serve a number of charitable & professional organizations, businesses, and government agencies throughout the United States, England, and the United Kingdom.
+
+At the time of this writing, for the calendar year of 2023, our agency has successfully migrated six instances of Umbraco 7 to Umbraco 10 or higher. We have four additional migrations underway.
+
+Here are some estimates:
+
+**Bare Metal – (${(150 * 8).toLocaleString()} USD)**
+
+- **Duration**: 2 Weeks
+- Mostly out-of-the-box (OOTB) Umbraco settings and functionality.
+- Dependencies have strong first-party support from Microsoft and/or Umbraco HQ.
+
+**Small Business – (${(150 * 8 * 5).toLocaleString()} USD)**
+
+- **Duration**: 10 Weeks
+- Minimal first-party customizations.
+- Minimal third-party customizations.
+- Nuget and Umbraco Packages have strong first-party or community support.
+
+**Professional – (${(150 * 8 * 5 * 4).toLocaleString()} USD)**
+
+- **Duration**: 4 - 6 Months
+- Nominal integrations that require refactors.
+
+**Enterprise – (${(150 * 8 * 5 * 4 * 4).toLocaleString()} USD)**
+
+- **Duration**: 6+ Months
+- Complex 1st and 3rd-party integrations.

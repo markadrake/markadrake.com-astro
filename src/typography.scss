@@ -13,13 +13,14 @@ p,
 td, dd, dt, dl,
 li {
 	font-size: 1rem;
-	line-height: 1.5;
+	line-height: var(--line-height);
 	margin-top: 0;
 }
 
 h1, h2, h3, h4, h5, h6,
+ul, ol,
 p {
-	margin-bottom: 1.5rem;
+	margin-bottom: var(--margin);
 }
 
 td, dd, dt, dl,
@@ -68,14 +69,16 @@ article > h3,
 	font-weight: bold;
 	max-width: 60ch;
 	line-height: 1.25;
+	margin-top: 3.25rem;
 
 	@media screen and (max-width: 59.99999rem) {
 		font-size: 1.25rem;
+		margin-top: 2.75rem;
 	}
 }
 
 blockquote {
-	margin: 1.5rem 0;
+	margin: var(--margin) 0;
 	padding: 1rem 0 0.01px 2rem;
 	border-left: 3px solid var(--borders);
 	opacity: 0.666;

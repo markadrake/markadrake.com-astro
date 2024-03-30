@@ -13,6 +13,8 @@
 	--foreground-link: rgb(111, 95, 255);
 	--foreground-link-visited: rgb(111, 95, 255);
 	--borders: rgba(0, 0, 0, 0.16);
+	--margin: 1.75rem;
+	--line-height: 1.75;
 }
 
 /*
@@ -20,7 +22,7 @@
 */
 @media (prefers-color-scheme: dark) {
 	:root {
-		--background: #222;
+		--background: #1e1e1e;
 		--foreground: #fff;
 		--foreground-link: rgb(95, 212, 255);
 		--foreground-link-visited: rgb(95, 212, 255);
